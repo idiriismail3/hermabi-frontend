@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Boutique — Hermabi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="motif-strip"></div>
+<header class="site-header">
+  <nav class="nav">
+    <a href="index.html" class="brand"><img src="images/logo.jpg" alt="Hermabi">HERMABI<small>Modern Moroccan Fashion</small></a>
+    <div class="nav-links">
+      <a href="shop.html">Boutique</a>
+      <a href="shop.html?cat=Maillots">Maillots</a>
+      <a href="shop.html?cat=Pantalons">Pantalons</a>
+    </div>
+    <div class="nav-right">
+      <a href="cart.html" class="cart-link">Panier <span class="cart-count">0</span></a>
+    </div>
+  </nav>
+</header>
+
+<section class="section" style="padding-top:60px;">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <span class="eyebrow">Boutique</span>
+        <h2 id="page-title">Toute la collection</h2>
+      </div>
+    </div>
+    <div class="filters" id="filters"></div>
+    <div class="product-grid" id="shop-grid"></div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-bottom">
+      <span>© 2026 Hermabi. Tous droits réservés.</span>
+      <span>Casablanca, Maroc</span>
+    </div>
+  </div>
+</footer>
+
+<script src="js/store.js"></script>
+<script>
+  const params = new URLSearchParams(location.search);
+  let activeCat = params.get('cat') || 'Tout';
+  const cats = ['Tout', 'Maillots', 'Pantalons'];
+
+  function renderFilters(){
+    document.getElementById('filters').innerHTML = cats.map(c => `
+      <button class="filter-btn ${c===activeCat?'active':''}" data-cat="${c}">${c}</button>
+    `).join('');
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        activeCat = btn.dataset.cat;
+        history.replaceState(null, '', activeCat==='Tout' ? 'shop.html' : `shop.html?cat=${activeCat}`);
+        renderFilters();
+        renderGrid();
+      });
+    });
+  }
+
+  function renderGrid(){
+    document.getElementById('page-title').textContent = activeCat === 'Tout' ? 'Toute la collection' : activeCat;
+    const list = activeCat === 'Tout' ? PRODUCTS : PRODUCTS.filter(p => p.cat === activeCat);
+    document.getElementById('shop-grid').innerHTML = list.map(p => `
+      <a href="product.html?id=${p.id}" class="card">
+        <div class="card-media">
+          <span class="card-tag">${p.cat}</span>
+          <img src="${p.img}" alt="${p.name}">
+        </div>
+        <div class="card-title">${p.name}</div>
+        <div class="card-cat">${p.cat}</div>
+        <div class="card-price">${fmtPrice(p.price)}</div>
+      </a>
+    `).join('');
+  }
+
+  renderFilters();
+  renderGrid();
+</script>
+</body>
+</html>

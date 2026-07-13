@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Produit — Hermabi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="motif-strip"></div>
+<header class="site-header">
+  <nav class="nav">
+    <a href="index.html" class="brand"><img src="images/logo.jpg" alt="Hermabi">HERMABI<small>Modern Moroccan Fashion</small></a>
+    <div class="nav-links">
+      <a href="shop.html">Boutique</a>
+      <a href="shop.html?cat=Maillots">Maillots</a>
+      <a href="shop.html?cat=Pantalons">Pantalons</a>
+    </div>
+    <div class="nav-right">
+      <a href="cart.html" class="cart-link">Panier <span class="cart-count">0</span></a>
+    </div>
+  </nav>
+</header>
+
+<div class="wrap" id="pd-root"></div>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-bottom">
+      <span>© 2026 Hermabi. Tous droits réservés.</span>
+      <span>Casablanca, Maroc</span>
+    </div>
+  </div>
+</footer>
+
+<script src="js/store.js"></script>
+<script>
+  const params = new URLSearchParams(location.search);
+  const product = getProduct(params.get('id'));
+  const root = document.getElementById('pd-root');
+
+  if(!product){
+    root.innerHTML = `<div class="empty-state"><h3>Produit introuvable</h3><p>Ce produit n'existe pas ou plus.</p><a href="shop.html" class="btn brass">Retour à la boutique</a></div>`;
+  } else {
+    document.title = product.name + " — Hermabi";
+    root.innerHTML = `
+      <div class="pd-grid">
+        <div class="pd-media"><img src="${product.img}" alt="${product.name}"></div>
+        <div>
+          <div class="pd-cat">${product.cat}</div>
+          <h1 class="pd-title">${product.name}</h1>
+          <div class="pd-price">${fmtPrice(product.price)}</div>
+          <p class="pd-desc">${product.desc}</p>
+
+          <div class="pd-row">
+            <div>
+              <label style="font-size:12px; letter-spacing:.06em; text-transform:uppercase; font-weight:600; display:block; margin-bottom:8px;">Taille</label>
+              <select id="size-select" style="width:140px;">
+                <option>S</option><option selected>M</option><option>L</option><option>XL</option>
+              </select>
+            </div>
+            <div>
+              <label style="font-size:12px; letter-spacing:.06em; text-transform:uppercase; font-weight:600; display:block; margin-bottom:8px;">Quantité</label>
+              <div class="qty-stepper">
+                <button type="button" id="qty-dec">−</button>
+                <input type="text" id="qty-input" value="1" readonly>
+                <button type="button" id="qty-inc">+</button>
+              </div>
+            </div>
+          </div>
+
+          <button class="btn brass block" id="add-btn">Ajouter au panier</button>
+
+          <div class="pd-meta">
+            <div>🇲🇦 Expédié depuis Casablanca — livraison 2 à 4 jours ouvrés</div>
+            <div>💳 Carte bancaire (CMI) ou paiement à la livraison</div>
+            <div>↩ Retours acceptés sous 14 jours</div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    let qty = 1;
+    const qtyInput = document.getElementById('qty-input');
+    document.getElementById('qty-inc').addEventListener('click', () => { qty++; qtyInput.value = qty; });
+    document.getElementById('qty-dec').addEventListener('click', () => { qty = Math.max(1, qty-1); qtyInput.value = qty; });
+    document.getElementById('add-btn').addEventListener('click', () => {
+      addToCart(product.id, qty);
+      showToast(`${product.name} ajouté au panier`);
+    });
+  }
+</script>
+</body>
+</html>

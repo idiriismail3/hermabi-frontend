@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hermabi — Modern Moroccan Fashion</title>
+<meta name="description" content="Hermabi — Modern Moroccan Fashion. Streetwear marocain, maillots et pantalons oversize. Paiement par carte bancaire ou à la livraison.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Playfair+Display:wght@700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<style>
+/* Homepage-specific additions */
+.hero-image {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  background: linear-gradient(135deg, var(--stucco) 0%, var(--stucco-dim) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
+}
+.hero-image.hero-video {
+  background: #000;
+}
+.video-container {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 0;
+}
+.video-container::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(18,17,16,0.5);
+  z-index: 1;
+}
+/* Homepage-specific additions */
+.hero-image {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  background: linear-gradient(135deg, var(--stucco) 0%, var(--stucco-dim) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
+}
+
+.hero-image.hero-video {
+  background: #000;
+}
+
+.hero-video-element {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+
+.hero-video-element::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(18,17,16,0.5);
+  z-index: 1;
+}
+
+.hero-image::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url('images/hermabi-02.jpg');
+  background-size: cover;
+  background-position: center;
+  opacity: 0.25;
+  z-index: 0;
+}
+
+.hero-video::before {
+  display: none;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 900px;
+  padding: 40px;
+  text-align: center;
+}
+
+.hero-image h1 {
+  font-family: 'Work Sans', sans-serif;
+  font-size: clamp(48px, 8vw, 84px);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--brass);
+  text-transform: uppercase;
+  margin: 0 0 20px;
+  line-height: 1.1;
+}
+
+.hero-image p {
+  font-size: 18px;
+  color: var(--cream);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 500;
+  margin: 0;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.hero-image .cta {
+  margin-top: 40px;
+}
+
+/* Collection sections */
+.collections-wrap {
+  padding: 80px 32px;
+}
+
+.collection-group {
+  margin-bottom: 100px;
+}
+
+.collection-title {
+  font-family: 'Work Sans', sans-serif;
+  font-size: 28px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--cream);
+  margin-bottom: 40px;
+  font-weight: 700;
+}
+
+.collection-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+.collection-card {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.collection-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+}
+
+.collection-card-img {
+  width: 100%;
+  aspect-ratio: 1;
+  background: #f0f0f0;
+  overflow: hidden;
+}
+
+.collection-card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.collection-card:hover .collection-card-img img {
+  transform: scale(1.05);
+}
+
+.collection-card-info {
+  padding: 20px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.collection-card-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.collection-card-price {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+/* Tagline section */
+.tagline-section {
+  text-align: center;
+  padding: 80px 32px;
+  border-top: 1px solid var(--line);
+}
+
+.tagline {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(32px, 6vw, 64px);
+  color: var(--cream);
+  font-weight: 700;
+  margin: 0;
+  line-height: 1.2;
+}
+
+/* Social links section */
+.socials-section {
+  padding: 60px 32px;
+  border-top: 1px solid var(--line);
+  text-align: center;
+}
+
+.socials-title {
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.social-links {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.social-links a {
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--cream);
+  border-bottom: 1px solid var(--brass);
+  padding-bottom: 2px;
+  transition: color 0.3s ease;
+}
+
+.social-links a:hover {
+  color: var(--brass);
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <nav class="nav">
+    <a href="index.html" class="brand"><img src="images/logo.jpg" alt="Hermabi">HERMABI<small>Modern Moroccan Fashion</small></a>
+    <div class="nav-links">
+      <a href="shop.html">Boutique</a>
+      <a href="shop.html?cat=Maillots">Maillots</a>
+      <a href="shop.html?cat=Pantalons">Pantalons</a>
+    </div>
+    <div class="nav-right">
+      <a href="cart.html" class="cart-link">Panier <span class="cart-count">0</span></a>
+    </div>
+  </nav>
+</header>
+
+<!-- Full-bleed video hero -->
+<section class="hero-image hero-video">
+  <video autoplay muted playsinline loop class="hero-video-element">
+    <source src="images/videointro.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+  <div class="hero-content">
+    <h1>HERMABI</h1>
+    <p>Moroccan Tailoring × Catalan Design</p>
+    
+    <div class="cta">
+      <a href="shop.html" class="btn brass">Explore Collection</a>
+    </div>
+  </div>
+</section>
+
+<!-- Collections -->
+<div class="collections-wrap">
+  <div class="collection-group">
+    <h2 class="collection-title">Maillots Collection</h2>
+    <div class="collection-cards" id="maillots-grid"></div>
+  </div>
+
+  <div class="collection-group">
+    <h2 class="collection-title">Pantalons Collection</h2>
+    <div class="collection-cards" id="pantalons-grid"></div>
+  </div>
+
+  <div class="collection-group">
+    <h2 class="collection-title">Sélection Complète</h2>
+    <div class="collection-cards" id="all-grid"></div>
+  </div>
+</div>
+
+<!-- Fusion Story -->
+<section class="tagline-section" style="padding: 100px 32px; border-top: 1px solid var(--line); border-bottom: 0;">
+  <div class="wrap" style="max-width: 700px; margin: 0 auto;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 32px; color: var(--cream); margin-bottom: 20px;">The Fusion</h2>
+    <p style="font-size: 16px; color: var(--muted); line-height: 1.8;">
+      Hermabi bridges two worlds: the generous, oversized tailoring of Moroccan streetwear meets the clean, minimalist design language of Catalonia. 
+      Every piece carries the soul of Casablanca's medinas and the edge of Barcelona's urban streets. 
+      Moroccan craft, Catalan aesthetic — one collection.
+    </p>
+  </div>
+</section>
+
+<!-- Tagline -->
+<section class="tagline-section">
+  <h2 class="tagline">Choose Your Own Style Too</h2>
+</section>
+
+<!-- Socials -->
+<section class="socials-section">
+  <div class="socials-title">Follow Us</div>
+  <div class="social-links">
+    <a href="https://www.instagram.com/hermabi10?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank">Instagram</a>
+    <a href="https://wa.me/212XXXXXXXXX" target="_blank">WhatsApp</a>
+    <a href="https://tiktok.com/@hermabi" target="_blank">TikTok</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="brand" style="margin-bottom: 0;"><img src="images/logo.jpg" alt="Hermabi">HERMABI</a>
+        <p style="margin-top:16px; font-size:14px; max-width:280px;">Moroccan tailoring meets Catalan design — fusion streetwear designed in Casablanca.</p>
+      </div>
+      <div>
+        <h4>Boutique</h4>
+        <a href="shop.html">Tous les articles</a>
+        <a href="shop.html?cat=Maillots">Maillots</a>
+        <a href="shop.html?cat=Pantalons">Pantalons</a>
+      </div>
+      <div>
+        <h4>Aide</h4>
+        <a href="cart.html">Mon panier</a>
+        <a href="checkout.html">Commander</a>
+        <a href="#">Livraison &amp; retours</a>
+      </div>
+      <div>
+        <h4>Paiement</h4>
+        <a href="#" style="pointer-events:none;">Carte bancaire (CMI)</a>
+        <a href="#" style="pointer-events:none;">Paiement à la livraison</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Hermabi. Tous droits réservés.</span>
+      <span>Casablanca, Maroc</span>
+    </div>
+  </div>
+</footer>
+
+<script src="js/store.js"></script>
+<script>
+  // Maillots collection
+  const maillots = PRODUCTS.filter(p => p.cat === 'Maillots');
+  document.getElementById('maillots-grid').innerHTML = maillots.slice(0, 6).map(p => `
+    <a href="product.html?id=${p.id}" class="collection-card">
+      <div class="collection-card-img"><img src="${p.img}" alt="${p.name}"></div>
+      <div class="collection-card-info">
+        <div class="collection-card-name">${p.name}</div>
+        <div class="collection-card-price">${fmtPrice(p.price)}</div>
+      </div>
+    </a>
+  `).join('');
+
+  // Pantalons collection
+  const pantalons = PRODUCTS.filter(p => p.cat === 'Pantalons');
+  document.getElementById('pantalons-grid').innerHTML = pantalons.slice(0, 6).map(p => `
+    <a href="product.html?id=${p.id}" class="collection-card">
+      <div class="collection-card-img"><img src="${p.img}" alt="${p.name}"></div>
+      <div class="collection-card-info">
+        <div class="collection-card-name">${p.name}</div>
+        <div class="collection-card-price">${fmtPrice(p.price)}</div>
+      </div>
+    </a>
+  `).join('');
+
+  // All products
+  document.getElementById('all-grid').innerHTML = PRODUCTS.slice(0, 6).map(p => `
+    <a href="product.html?id=${p.id}" class="collection-card">
+      <div class="collection-card-img"><img src="${p.img}" alt="${p.name}"></div>
+      <div class="collection-card-info">
+        <div class="collection-card-name">${p.name}</div>
+        <div class="collection-card-price">${fmtPrice(p.price)}</div>
+      </div>
+    </a>
+  `).join('');
+</script>
+</body>
+</html>
