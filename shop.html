@@ -51,7 +51,7 @@
 <script>
   const params = new URLSearchParams(location.search);
   let activeCat = params.get('cat') || 'Tout';
-  const cats = ['Tout', 'Maillots', 'Pantalons'];
+  const cats = ['Tout', 'Maillots', 'Pantalons', 'Accessories'];
 
   function renderFilters(){
     document.getElementById('filters').innerHTML = cats.map(c => `

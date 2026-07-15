@@ -39,7 +39,8 @@
 <script src="js/store.js"></script>
 <script>
   const params = new URLSearchParams(location.search);
-  const product = getProduct(params.get('id'));
+  const productId = parseInt(params.get('id')); // Convert string to number
+  const product = getProduct(productId);
   const root = document.getElementById('pd-root');
 
   if(!product){
@@ -75,8 +76,8 @@
           <button class="btn brass block" id="add-btn">Ajouter au panier</button>
 
           <div class="pd-meta">
-            <div>🇲🇦 Expédié depuis Casablanca — livraison 2 à 4 jours ouvrés</div>
-            <div>💳 Carte bancaire (CMI) ou paiement à la livraison</div>
+            <div>🇲🇦 Expédié depuis Tetouane — livraison 2 à 4 jours ouvrés</div>
+            <div>💳 Virement RIB ou paiement à la livraison</div>
             <div>↩ Retours acceptés sous 14 jours</div>
           </div>
         </div>
