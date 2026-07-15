@@ -1,12 +1,12 @@
 // ---- HERMABI catalog — Moroccan-Catalan fusion streetwear ----
 const PRODUCTS = [
-  { id: 1,  name: "Black Catalan Shirt 01",   cat: "Maillots",  price: 250, img: "images/shirt-01.jpg", desc: "Oversized black shirt with classic 00 print. Moroccan tailoring meets Catalan minimalism." },
-  { id: 2,  name: "Black Catalan Shirt 02",   cat: "Maillots",  price: 250, img: "images/shirt-02.jpg", desc: "Premium burgundy fusion shirt. Comfortable oversize fit, perfect for everyday wear." },
-  { id: 3,  name: "Black Catalan Shirt 03",   cat: "Maillots",  price: 250, img: "images/shirt-03.jpg", desc: "Elegant beige shirt with embroidered details. Quality Catalan craftsmanship." },
-  { id: 4,  name: "Black Catalan Shirt 04",   cat: "Maillots",  price: 250, img: "images/shirt-04.jpg", desc: "Navy blue premium shirt. Statement piece for the modern Moroccan-Catalan style." },
-  { id: 5,  name: "Black Catalan Shirt 05",   cat: "Maillots",  price: 250, img: "images/shirt-05.jpg", desc: "Textured black shirt with unique fabric. Limited edition fusion design." },
-  { id: 6,  name: "Pantalon Fluide Noir",      cat: "Pantalons", price: 250, img: "images/hermabi-11.jpg", desc: "Fluid black pants, elastic waist, comfortable straight cut." },
-  { id: 7,  name: "Pantalon Cargo Noir",       cat: "Pantalons", price: 250, img: "images/hermabi-12.jpg", desc: "Black cargo pants with flap pockets, drawstring waist." },
+  { id: 1,  name: "Black Catalan Shirt 01",   cat: "Maillots",  price: 199, img: "images/shirt-01.jpg", desc: "Oversized black shirt with classic 00 print. Moroccan tailoring meets Catalan minimalism." },
+  { id: 2,  name: "Black Catalan Shirt 02",   cat: "Maillots",  price: 199, img: "images/shirt-02.jpg", desc: "Premium burgundy fusion shirt. Comfortable oversize fit, perfect for everyday wear." },
+  { id: 3,  name: "Black Catalan Shirt 03",   cat: "Maillots",  price: 199, img: "images/shirt-03.jpg", desc: "Elegant beige shirt with embroidered details. Quality Catalan craftsmanship." },
+  { id: 4,  name: "Black Catalan Shirt 04",   cat: "Maillots",  price: 199, img: "images/shirt-04.jpg", desc: "Navy blue premium shirt. Statement piece for the modern Moroccan-Catalan style." },
+  { id: 5,  name: "Black Catalan Shirt 05",   cat: "Maillots",  price: 199, img: "images/shirt-05.jpg", desc: "Textured black shirt with unique fabric. Limited edition fusion design." },
+  { id: 6,  name: "Pantalon Fluide Noir",      cat: "Pantalons", price: 199, img: "images/hermabi-11.jpg", desc: "Fluid black pants, elastic waist, comfortable straight cut." },
+  { id: 7,  name: "Pantalon Cargo Noir",       cat: "Pantalons", price: 199, img: "images/hermabi-12.jpg", desc: "Black cargo pants with flap pockets, drawstring waist." },
 ];
 
 // ---- Helper function for price formatting ----
