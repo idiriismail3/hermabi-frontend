@@ -140,6 +140,8 @@ function renderCheckoutForm(){
           <div id="cod-info" style="display: none; background: #d4edda; padding: 15px; border-radius: 8px; margin-top: 20px;">
             <p style="margin: 0; color: #155724; font-size: 13px;">💵 Vous payerez le montant en espèces à la livraison. Aucun paiement préalable nécessaire.</p>
           </div>
+          <button type="submit" class="btn brass block" style="margin-top: 24px;">Confirmer la commande</button>
+      </form>
         <div class="summary-row" style="border-top:1px solid var(--line); padding-top:14px; margin-top:6px;"><span>Sous-total</span><span>${fmtPrice(sub)}</span></div>
         <div class="summary-row"><span>Livraison</span><span>${ship===0?'Offerte':fmtPrice(ship)}</span></div>
         <div class="summary-row total"><span>Total</span><span>${fmtPrice(total)}</span></div>
