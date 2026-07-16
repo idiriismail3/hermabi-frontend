@@ -100,10 +100,10 @@
     }));
     root.querySelectorAll('[data-dec]').forEach(b => b.addEventListener('click', () => {
       const id = b.dataset.dec; const item = getCart().find(i=>i.id===Number(id));
-      updateCartQty(id, (item?.qty||1) - 1); render();
+      updateCartItemQty(Number(id), (item?.qty||1) - 1); render();
     }));
     root.querySelectorAll('[data-remove]').forEach(b => b.addEventListener('click', () => {
-      removeFromCart(b.dataset.remove); render();
+      removeFromCart(Number(b.dataset.remove)); render();
     }));
   }
   render();
