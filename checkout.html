@@ -102,45 +102,44 @@ function renderCheckoutForm(){
           </div>
         </div>
 
-        <div class="form-block">
-          <h3><span class="num">3</span> Mode de paiement</h3>
-          <p style="font-size:13px; color:var(--muted); margin:-8px 0 16px;">Choisissez une option ci-dessous — cliquez sur "Carte bancaire" pour afficher les champs de saisie de votre carte.</p>
+        <h3><span class="num">3</span> Mode de paiement</h3>
+          <p style="font-size:13px; color:var(--muted); margin:-8px 0 16px;">Choisissez votre méthode de paiement ci-dessous.</p>
           <div class="pay-options">
-            <label class="pay-option selected" data-opt="cod">
-              <input type="radio" name="payment" value="cod" checked>
+            <label class="pay-option selected" data-opt="rib">
+              <input type="radio" name="payment" value="rib" checked>
               <div>
+                <div class="title">🏦 Virement Bancaire (RIB)</div>
+                <div class="desc">Versez le montant sur notre compte bancaire CIH Bank.</div>
+              </div>
+            </label>
+            <label class="pay-option" data-opt="cod">
+              <input type="radio" name="payment" value="cod">
+              <div style="width:100%;">
                 <div class="title">💵 Paiement à la livraison</div>
                 <div class="desc">Payez en espèces au livreur à la réception de votre colis.</div>
               </div>
             </label>
-            <label class="pay-option" data-opt="card">
-              <input type="radio" name="payment" value="card">
-              <div style="width:100%;">
-                <div class="title">💳 Carte bancaire</div>
-                <div class="desc">Paiement sécurisé via CMI (Visa / Mastercard). Cliquez ici pour saisir votre carte.</div>
-                <div class="card-fields" id="card-fields">
-                  <div class="field-row" style="margin-top:14px;">
-                    <div class="field" style="grid-column: 1 / -1;">
-                      <label>Numéro de carte</label>
-                      <input type="text" name="cardnum" placeholder="•••• •••• •••• ••••" inputmode="numeric" maxlength="19">
-                    </div>
-                  </div>
-                  <div class="field-row">
-                    <div class="field"><label>Expiration</label><input type="text" name="cardexp" placeholder="MM/AA"></div>
-                    <div class="field"><label>CVC</label><input type="text" name="cardcvc" placeholder="123" maxlength="4"></div>
-                  </div>
-                </div>
-              </div>
-            </label>
           </div>
-        </div>
 
-        <button type="submit" class="btn brass block">Confirmer la commande — ${fmtPrice(total)}</button>
-      </form>
+          <!-- RIB Information -->
+          <div id="rib-info" style="background: #f5f5f5; padding: 20px; border-radius: 8px; margin-top: 20px; display: block;">
+            <h4 style="color: var(--brass); margin-top: 0; margin-bottom: 15px;">📋 Informations de Virement</h4>
+            <div style="background: white; padding: 15px; border-radius: 6px; margin-bottom: 15px; font-size: 13px;">
+              <p style="margin: 8px 0;"><strong>Titulaire:</strong> MONSIEUR AYMANE ELWAHABI</p>
+              <p style="margin: 8px 0;"><strong>RIB:</strong> 230 720 36931202110086600 26</p>
+              <p style="margin: 8px 0;"><strong>IBAN:</strong> MA64 2307 2036 9312 0211 0086 0026</p>
+              <p style="margin: 8px 0;"><strong>SWIFT:</strong> CIHMMAMC</p>
+              <p style="margin: 8px 0;"><strong>Banque:</strong> CIH Bank</p>
+            </div>
+            <p style="color: #666; font-size: 12px; background: #fff3cd; padding: 12px; border-radius: 4px; margin: 0;">
+              ⚠️ Après avoir effectué le virement, envoyez la preuve (screenshot) à <strong>idiriismail3@gmail.com</strong> pour confirmer votre commande.
+            </p>
+          </div>
 
-      <div class="summary">
-        <h3>Votre commande</h3>
-        ${lines}
+          <!-- COD Information -->
+          <div id="cod-info" style="display: none; background: #d4edda; padding: 15px; border-radius: 8px; margin-top: 20px;">
+            <p style="margin: 0; color: #155724; font-size: 13px;">💵 Vous payerez le montant en espèces à la livraison. Aucun paiement préalable nécessaire.</p>
+          </div>
         <div class="summary-row" style="border-top:1px solid var(--line); padding-top:14px; margin-top:6px;"><span>Sous-total</span><span>${fmtPrice(sub)}</span></div>
         <div class="summary-row"><span>Livraison</span><span>${ship===0?'Offerte':fmtPrice(ship)}</span></div>
         <div class="summary-row total"><span>Total</span><span>${fmtPrice(total)}</span></div>
@@ -175,7 +174,7 @@ function validate(form){
   });
 
   const payment = form.querySelector('[name="payment"]:checked').value;
-  if(payment === 'card'){
+  if(payment === 'rib'){
     const cardnum = form.querySelector('[name="cardnum"]').value.replace(/\s/g,'');
     const cardexp = form.querySelector('[name="cardexp"]').value;
     const cardcvc = form.querySelector('[name="cardcvc"]').value;
@@ -254,10 +253,10 @@ function handleSubmit(e){
       return;
     }
 
-    if (payment === 'card') {
-      showConfirmation(data.orderId, total, 'card');
-      return;
-    }
+    if (payment === 'rib') {
+  showConfirmation(data.orderId, total, 'rib');
+  return;
+}
   })
   .catch(error => {
     console.error('Checkout error:', error);
@@ -295,5 +294,14 @@ function showConfirmation(orderRef, total, method){
 
 renderCheckoutForm();
 </script>
+<script>
+  // Show/hide payment info
+  document.querySelectorAll('input[name="payment"]').forEach(radio => {
+    radio.addEventListener('change', function() {
+      document.getElementById('rib-info').style.display = this.value === 'rib' ? 'block' : 'none';
+      document.getElementById('cod-info').style.display = this.value === 'cod' ? 'block' : 'none';
+    });
+  });
+  </script>
 </body>
 </html>
