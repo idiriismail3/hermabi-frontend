@@ -64,13 +64,16 @@
               </select>
             </div>
             <div>
-              <label style="font-size:12px; letter-spacing:.06em; text-transform:uppercase; font-weight:600; display:block; margin-bottom:8px;">Quantité</label>
-              <div class="qty-stepper">
-                <button type="button" id="qty-dec">−</button>
-                <input type="text" id="qty-input" value="1" readonly>
-                <button type="button" id="qty-inc">+</button>
-              </div>
-            </div>
+              <div>
+  <label style="font-size:12px; letter-spacing:.06em; text-transform:uppercase; font-weight:600; display:block; margin-bottom:8px;">Quantité</label>
+  <select id="qty-select" style="width: 100px; padding: 8px; border: 1px solid var(--line); border-radius: 4px; font-size: 14px;">
+    <option value="1">1 article</option>
+    <option value="2">2 articles</option>
+    <option value="3">3 articles</option>
+    <option value="4">4 articles</option>
+    <option value="5">5 articles</option>
+  </select>
+</div>
           </div>
 
           <button class="btn brass block" id="add-btn">Ajouter au panier</button>
@@ -85,13 +88,15 @@
     `;
 
     let qty = 1;
-    const qtyInput = document.getElementById('qty-input');
-    document.getElementById('qty-inc').addEventListener('click', () => { qty++; qtyInput.value = qty; });
-    document.getElementById('qty-dec').addEventListener('click', () => { qty = Math.max(1, qty-1); qtyInput.value = qty; });
-    document.getElementById('add-btn').addEventListener('click', () => {
-      addToCart(product.id, qty);
-      showToast(`${product.name} ajouté au panier`);
-    });
+const qtySelect = document.getElementById('qty-select');
+qtySelect.addEventListener('change', () => {
+  qty = parseInt(qtySelect.value);
+});
+document.getElementById('add-btn').addEventListener('click', () => {
+  qty = parseInt(qtySelect.value);
+  addToCart(product.id, qty);
+  showToast(`${product.name} (Quantité: ${qty}) ajouté au panier`);
+});
   }
 </script>
 </body>
