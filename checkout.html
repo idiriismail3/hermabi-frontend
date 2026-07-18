@@ -275,39 +275,27 @@ function handleSubmit(e){
 
     saveCart([]);
 
-    if (payment === 'cod') {
-  // Save order to localStorage
-  const ordersKey = 'hermabi_orders';
-  const existingOrders = JSON.parse(localStorage.getItem(ordersKey) || '[]');
-  existingOrders.push({
-    id: data.orderId,
-    customer: customer,
-    items: cart,
-    total: total,
-    paymentMethod: payment,
-    status: 'confirmed'
-  });
-  localStorage.setItem(ordersKey, JSON.stringify(existingOrders));
-  
+    // Save order to localStorage for BOTH payment methods
+const ordersKey = 'hermabi_orders';
+const existingOrders = JSON.parse(localStorage.getItem(ordersKey) || '[]');
+const newOrder = {
+  id: data.orderId,
+  customer: customer,
+  items: cart,
+  total: total,
+  paymentMethod: payment,
+  status: 'confirmed'
+};
+existingOrders.push(newOrder);
+localStorage.setItem(ordersKey, JSON.stringify(existingOrders));
+
+if (payment === 'cod') {
   showConfirmation(data.orderId, total, 'cod');
   return;
 }
 
 if (payment === 'whatsapp') {
-  // Save order to localStorage
-  const ordersKey = 'hermabi_orders';
-  const existingOrders = JSON.parse(localStorage.getItem(ordersKey) || '[]');
-  existingOrders.push({
-    id: data.orderId,
-    customer: customer,
-    items: cart,
-    total: total,
-    paymentMethod: payment,
-    status: 'confirmed'
-  });
-  localStorage.setItem(ordersKey, JSON.stringify(existingOrders));
-  
-  // Build detailed order message
+  // Build WhatsApp message
   const cartDetails = cart.map(item => {
     const p = getProduct(item.id);
     return `• ${p.name} (Taille: ${item.size || 'M'}) x${item.qty} = ${fmtPrice(p.price * item.qty)}`;
