@@ -276,29 +276,41 @@ function handleSubmit(e){
     saveCart([]);
 
     if (payment === 'cod') {
-      showConfirmation(data.orderId, total, 'cod');
-      // Save order to localStorage for admin dashboard
-      const ordersKey = 'hermabi_orders';
-      const existingOrders = JSON.parse(localStorage.getItem(ordersKey) || '[]');
-      existingOrders.push({
-         id: orderRef,
-          timestamp: new Date().toISOString(),
-          customer: customer,
-          items: cart,
-          total: total,
-          paymentMethod: method,
-          status: method === 'whatsapp' ? 'pending_whatsapp' : 'confirmed'
-});
-localStorage.setItem(ordersKey, JSON.stringify(existingOrders));
-      return;
-    }
+  // Save order to localStorage
+  const ordersKey = 'hermabi_orders';
+  const existingOrders = JSON.parse(localStorage.getItem(ordersKey) || '[]');
+  existingOrders.push({
+    id: data.orderId,
+    customer: customer,
+    items: cart,
+    total: total,
+    paymentMethod: payment,
+    status: 'confirmed'
+  });
+  localStorage.setItem(ordersKey, JSON.stringify(existingOrders));
+  
+  showConfirmation(data.orderId, total, 'cod');
+  return;
+}
 
-    if (payment === 'whatsapp') {
-  // Build detailed order message with products
+if (payment === 'whatsapp') {
+  // Save order to localStorage
+  const ordersKey = 'hermabi_orders';
+  const existingOrders = JSON.parse(localStorage.getItem(ordersKey) || '[]');
+  existingOrders.push({
+    id: data.orderId,
+    customer: customer,
+    items: cart,
+    total: total,
+    paymentMethod: payment,
+    status: 'confirmed'
+  });
+  localStorage.setItem(ordersKey, JSON.stringify(existingOrders));
+  
+  // Build detailed order message
   const cartDetails = cart.map(item => {
     const p = getProduct(item.id);
-    const size = document.querySelector(`[data-product="${item.id}"] select`)?.value || 'M';
-    return `• ${p.name} (Taille: ${size}) x${item.qty} = ${fmtPrice(p.price * item.qty)}`;
+    return `• ${p.name} (Taille: ${item.size || 'M'}) x${item.qty} = ${fmtPrice(p.price * item.qty)}`;
   }).join('%0A');
   
   const message = `Bonjour Hermabi%0A%0A📦 *Nouvelle Commande*%0ANuméro: ${data.orderId}%0A%0A*Produits:*%0A${cartDetails}%0A%0A*Sous-total:* ${fmtPrice(cartSubtotal())} DHS%0A*Livraison:* ${fmtPrice(shippingCost())} DHS%0A*TOTAL:* ${fmtPrice(total)} DHS%0A%0AClient: ${customer.fullname}%0ATéléphone: ${customer.phone}%0AAdresse: ${customer.address}, ${customer.city}%0A%0AJe voudrais confirmer et payer cette commande.`;
