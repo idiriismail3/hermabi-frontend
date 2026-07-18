@@ -1,14 +1,26 @@
 // ---- HERMABI catalog — Moroccan-Catalan fusion streetwear ----
 const PRODUCTS = [
-  { id: 1,  name: "Black Catalan Shirt Classic",      cat: "Maillots",  price: 199, img: "images/shirt-01.jpg", desc: "Oversized black shirt with classic 00 print. Moroccan tailoring meets Catalan minimalism." },
-  { id: 2,  name: "Burgundy Catalan Shirt Premium",   cat: "Maillots",  price: 199, img: "images/shirt-02.jpg", desc: "Premium burgundy fusion shirt. Comfortable oversize fit, perfect for everyday wear." },
-  { id: 3,  name: "Beige Catalan Shirt Elegant",      cat: "Maillots",  price: 199, img: "images/shirt-03.jpg", desc: "Elegant beige shirt with embroidered details. Quality Catalan craftsmanship." },
-  { id: 4,  name: "Navy Blue Catalan Shirt Statement", cat: "Maillots",  price: 199, img: "images/shirt-04.jpg", desc: "Navy blue premium shirt. Statement piece for the modern Moroccan-Catalan style." },
-  { id: 5,  name: "Charcoal Catalan Shirt Limited",   cat: "Maillots",  price: 199, img: "images/shirt-05.jpg", desc: "Textured charcoal shirt with unique fabric. Limited edition fusion design." },
-  { id: 6,  name: "Black Fluid Pants",                 cat: "Pantalons", price: 199, img: "images/hermabi-11.jpg", desc: "Fluid black pants, elastic waist, comfortable straight cut." },
-  { id: 7,  name: "Black Cargo Pants",                 cat: "Pantalons", price: 199, img: "images/hermabi-12.jpg", desc: "Black cargo pants with flap pockets, drawstring waist." },
-  { id: 8,  name: "Designer Sunglasses",               cat: "Accessories", price: 100, img: "images/sunglasses.png", desc: "Premium sunglasses with UV protection. Statement accessory for the modern Hermabi style." },
+  { id: 1,  name: "Black Catalan Shirt Classic",      cat: "Maillots",  price: 199, stock: 50, img: "images/shirt-01.jpg", desc: "Oversized black shirt with classic 00 print. Moroccan tailoring meets Catalan minimalism." },
+  { id: 2,  name: "Burgundy Catalan Shirt Premium",   cat: "Maillots",  price: 199, stock: 50, img: "images/shirt-02.jpg", desc: "Premium burgundy fusion shirt. Comfortable oversize fit, perfect for everyday wear." },
+  { id: 3,  name: "Beige Catalan Shirt Elegant",      cat: "Maillots",  price: 199, stock: 50, img: "images/shirt-03.jpg", desc: "Elegant beige shirt with embroidered details. Quality Catalan craftsmanship." },
+  { id: 4,  name: "Navy Blue Catalan Shirt Statement", cat: "Maillots",  price: 199, stock: 50, img: "images/shirt-04.jpg", desc: "Navy blue premium shirt. Statement piece for the modern Moroccan-Catalan style." },
+  { id: 5,  name: "Charcoal Catalan Shirt Limited",   cat: "Maillots",  price: 199, stock: 50, img: "images/shirt-05.jpg", desc: "Textured charcoal shirt with unique fabric. Limited edition fusion design." },
+  { id: 6,  name: "Black Fluid Pants",                 cat: "Pantalons", price: 199, stock: 50, img: "images/hermabi-11.jpg", desc: "Fluid black pants, elastic waist, comfortable straight cut." },
+  { id: 7,  name: "Black Cargo Pants",                 cat: "Pantalons", price: 199, stock: 50, img: "images/hermabi-12.jpg", desc: "Black cargo pants with flap pockets, drawstring waist." },
+  { id: 8,  name: "Designer Sunglasses",               cat: "Accessories", price: 100, stock: 50, img: "images/sunglasses.png", desc: "Premium sunglasses with UV protection. Statement accessory for the modern Hermabi style." },
 ];
+
+// Store products in localStorage for admin to edit
+const PRODUCTS_KEY = 'hermabi_products';
+
+function getProducts() {
+  const stored = localStorage.getItem(PRODUCTS_KEY);
+  return stored ? JSON.parse(stored) : PRODUCTS;
+}
+
+function saveProducts(products) {
+  localStorage.setItem(PRODUCTS_KEY, JSON.stringify(products));
+}
 
 // ---- Helper function for price formatting ----
 function fmtPrice(amount) {
@@ -16,12 +28,18 @@ function fmtPrice(amount) {
 }
 
 function getProduct(id) {
-  return PRODUCTS.find(p => p.id === id);
+  const products = getProducts();
+  return products.find(p => p.id === id);
+}
+
+function isInStock(productId) {
+  const product = getProduct(productId);
+  return product && product.stock > 0;
 }
 
 // ---- Cart management (localStorage) ----
 const CART_KEY = 'maisonAtlasCart';
-const SHIPPING_FLAT = 39;
+const SHIPPING_FLAT = 25;
 const FREE_SHIPPING_THRESHOLD = 800;
 
 function getCart() {
@@ -33,27 +51,39 @@ function saveCart(cart) {
   localStorage.setItem(CART_KEY, JSON.stringify(cart));
 }
 
-function addToCart(productId, qty = 1) {
+function addToCart(productId, qty = 1, size = 'M') {
+  if (!isInStock(productId)) {
+    alert('Ce produit est actuellement en rupture de stock.');
+    return;
+  }
+  
   const cart = getCart();
-  const existing = cart.find(item => item.id === productId);
+  const existing = cart.find(item => item.id === productId && item.size === size);
   if (existing) {
     existing.qty += qty;
   } else {
-    cart.push({ id: productId, qty: qty });
+    cart.push({ id: productId, qty: qty, size: size });
   }
   saveCart(cart);
   updateCartCount();
 }
 
-function removeFromCart(productId) {
-  const cart = getCart().filter(item => item.id !== productId);
+function removeFromCart(productId, size = null) {
+  const cart = getCart().filter(item => {
+    if (size) {
+      return !(item.id === productId && item.size === size);
+    }
+    return item.id !== productId;
+  });
   saveCart(cart);
   updateCartCount();
 }
 
-function updateCartItemQty(productId, qty) {
+function updateCartItemQty(productId, qty, size = null) {
   const cart = getCart();
-  const item = cart.find(i => i.id === productId);
+  const item = size ? 
+    cart.find(i => i.id === productId && i.size === size) :
+    cart.find(i => i.id === productId);
   if (item) item.qty = Math.max(1, qty);
   saveCart(cart);
 }
