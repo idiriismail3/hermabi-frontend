@@ -277,6 +277,19 @@ function handleSubmit(e){
 
     if (payment === 'cod') {
       showConfirmation(data.orderId, total, 'cod');
+      // Save order to localStorage for admin dashboard
+      const ordersKey = 'hermabi_orders';
+      const existingOrders = JSON.parse(localStorage.getItem(ordersKey) || '[]');
+      existingOrders.push({
+         id: orderRef,
+          timestamp: new Date().toISOString(),
+          customer: customer,
+          items: cart,
+          total: total,
+          paymentMethod: method,
+          status: method === 'whatsapp' ? 'pending_whatsapp' : 'confirmed'
+});
+localStorage.setItem(ordersKey, JSON.stringify(existingOrders));
       return;
     }
 

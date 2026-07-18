@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Dashboard — Hermabi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --stucco: #121110;
+  --stucco-dim: #1B1815;
+  --ink: #0A0908;
+  --text: #EFE6D3;
+  --brass: #C9A227;
+  --cream: #F4ECDD;
+  --line: #3A3327;
+  --muted: #B8AD97;
+  --error: #9C3B34;
+}
+
+body {
+  font-family: 'Work Sans', sans-serif;
+  background: var(--stucco);
+  color: var(--text);
+}
+
+/* Login Screen */
+.login-screen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: linear-gradient(135deg, var(--stucco) 0%, var(--stucco-dim) 100%);
+}
+
+.login-box {
+  background: var(--stucco-dim);
+  padding: 40px;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 400px;
+  border: 1px solid var(--line);
+}
+
+.login-box h1 {
+  font-size: 28px;
+  color: var(--brass);
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.login-box input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 15px;
+  background: var(--stucco);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  color: var(--text);
+  font-size: 14px;
+}
+
+.login-box input::placeholder {
+  color: var(--muted);
+}
+
+.login-box button {
+  width: 100%;
+  padding: 12px;
+  background: var(--brass);
+  color: var(--ink);
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.login-box button:hover {
+  background: #E3C765;
+}
+
+.login-error {
+  color: var(--error);
+  font-size: 12px;
+  margin-top: 10px;
+}
+
+/* Dashboard */
+.dashboard {
+  display: none;
+  min-height: 100vh;
+  background: var(--stucco);
+}
+
+.dashboard.active {
+  display: block;
+}
+
+.header {
+  background: var(--stucco-dim);
+  padding: 20px 30px;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header h1 {
+  color: var(--brass);
+  font-size: 24px;
+}
+
+.logout-btn {
+  background: var(--error);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.logout-btn:hover {
+  background: #B84A42;
+}
+
+.nav-tabs {
+  display: flex;
+  background: var(--stucco-dim);
+  padding: 0 30px;
+  border-bottom: 1px solid var(--line);
+  gap: 30px;
+}
+
+.nav-tab {
+  padding: 15px 0;
+  color: var(--muted);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.nav-tab.active {
+  color: var(--brass);
+  border-bottom-color: var(--brass);
+}
+
+.content {
+  padding: 30px;
+  display: none;
+}
+
+.content.active {
+  display: block;
+}
+
+.section-title {
+  color: var(--brass);
+  font-size: 20px;
+  margin-bottom: 20px;
+  font-weight: 700;
+}
+
+/* Products Section */
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 20px;
+}
+
+.product-card {
+  background: var(--stucco-dim);
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+}
+
+.product-card h3 {
+  color: var(--cream);
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.product-card img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 6px;
+  margin-bottom: 15px;
+}
+
+.product-card input {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  background: var(--stucco);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  color: var(--text);
+  font-size: 12px;
+}
+
+.product-card button {
+  width: 100%;
+  padding: 10px;
+  background: var(--brass);
+  color: var(--ink);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.product-card button:hover {
+  background: #E3C765;
+}
+
+/* Orders Section */
+.orders-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--stucco-dim);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.orders-table th {
+  background: var(--ink);
+  padding: 15px;
+  text-align: left;
+  color: var(--brass);
+  font-weight: 700;
+  font-size: 12px;
+  border-bottom: 1px solid var(--line);
+}
+
+.orders-table td {
+  padding: 15px;
+  border-bottom: 1px solid var(--line);
+  font-size: 13px;
+}
+
+.orders-table tr:hover {
+  background: rgba(201, 162, 39, 0.1);
+}
+
+.order-status {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.status-pending {
+  background: rgba(156, 59, 52, 0.2);
+  color: #E8A8A2;
+}
+
+.status-confirmed {
+  background: rgba(25, 135, 84, 0.2);
+  color: #5FD3BC;
+}
+
+.status-paid {
+  background: rgba(201, 162, 39, 0.2);
+  color: var(--brass);
+}
+
+.no-data {
+  text-align: center;
+  padding: 40px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+@media (max-width: 768px) {
+  .products-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .orders-table {
+    font-size: 11px;
+  }
+  
+  .orders-table th,
+  .orders-table td {
+    padding: 10px;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- Login Screen -->
+<div id="login-screen" class="login-screen">
+  <div class="login-box">
+    <h1>Hermabi Admin</h1>
+    <input type="password" id="login-password" placeholder="Mot de passe">
+    <button onclick="login()">Connexion</button>
+    <div id="login-error" class="login-error"></div>
+  </div>
+</div>
+
+<!-- Dashboard -->
+<div id="dashboard" class="dashboard">
+  <div class="header">
+    <h1>Tableau de Bord Admin</h1>
+    <button class="logout-btn" onclick="logout()">Déconnexion</button>
+  </div>
+
+  <div class="nav-tabs">
+    <div class="nav-tab active" onclick="switchTab('products')">📦 Produits</div>
+    <div class="nav-tab" onclick="switchTab('orders')">📋 Commandes</div>
+  </div>
+
+  <!-- Products Tab -->
+  <div id="products-tab" class="content active">
+    <h2 class="section-title">Gestion des Produits</h2>
+    <div class="products-grid" id="products-grid"></div>
+  </div>
+
+  <!-- Orders Tab -->
+  <div id="orders-tab" class="content">
+    <h2 class="section-title">Toutes les Commandes</h2>
+    <div id="orders-container"></div>
+  </div>
+</div>
+
+<script src="js/store.js"></script>
+<script>
+const ADMIN_PASSWORD = 'hermabi2024'; // Change this!
+
+// Check if admin is logged in
+function checkLogin() {
+  const isLoggedIn = sessionStorage.getItem('admin_logged_in');
+  if (isLoggedIn === 'true') {
+    showDashboard();
+  } else {
+    showLogin();
+  }
+}
+
+function login() {
+  const password = document.getElementById('login-password').value;
+  if (password === ADMIN_PASSWORD) {
+    sessionStorage.setItem('admin_logged_in', 'true');
+    showDashboard();
+  } else {
+    document.getElementById('login-error').textContent = 'Mot de passe incorrect';
+  }
+}
+
+function logout() {
+  sessionStorage.removeItem('admin_logged_in');
+  showLogin();
+  document.getElementById('login-password').value = '';
+}
+
+function showLogin() {
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('dashboard').classList.remove('active');
+}
+
+function showDashboard() {
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('dashboard').classList.add('active');
+  loadProducts();
+  loadOrders();
+}
+
+function switchTab(tab) {
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
+  
+  event.target.classList.add('active');
+  document.getElementById(tab + '-tab').classList.add('active');
+}
+
+function loadProducts() {
+  const products = getProducts();
+  const grid = document.getElementById('products-grid');
+  
+  grid.innerHTML = products.map(p => `
+    <div class="product-card">
+      <img src="${p.img}" alt="${p.name}">
+      <h3>${p.name}</h3>
+      <label style="display:block; color: var(--muted); font-size: 11px; margin-bottom: 5px;">Prix (DHS)</label>
+      <input type="number" value="${p.price}" onchange="updatePrice(${p.id}, this.value)">
+      <label style="display:block; color: var(--muted); font-size: 11px; margin-bottom: 5px;">Stock</label>
+      <input type="number" value="${p.stock}" onchange="updateStock(${p.id}, this.value)">
+      <button onclick="deleteProduct(${p.id})">Supprimer</button>
+    </div>
+  `).join('');
+}
+
+function updatePrice(id, newPrice) {
+  const products = getProducts();
+  const product = products.find(p => p.id === id);
+  if (product) {
+    product.price = parseInt(newPrice);
+    saveProducts(products);
+    alert('Prix mis à jour');
+  }
+}
+
+function updateStock(id, newStock) {
+  const products = getProducts();
+  const product = products.find(p => p.id === id);
+  if (product) {
+    product.stock = parseInt(newStock);
+    saveProducts(products);
+    alert('Stock mis à jour');
+  }
+}
+
+function deleteProduct(id) {
+  if (confirm('Êtes-vous sûr?')) {
+    const products = getProducts().filter(p => p.id !== id);
+    saveProducts(products);
+    loadProducts();
+  }
+}
+
+function loadOrders() {
+  const ordersJson = localStorage.getItem('hermabi_orders');
+  const orders = ordersJson ? JSON.parse(ordersJson) : [];
+  
+  const container = document.getElementById('orders-container');
+  
+  if (orders.length === 0) {
+    container.innerHTML = '<div class="no-data">Aucune commande</div>';
+    return;
+  }
+  
+  const table = `
+    <table class="orders-table">
+      <thead>
+        <tr>
+          <th>N° Commande</th>
+          <th>Client</th>
+          <th>Téléphone</th>
+          <th>Produits</th>
+          <th>Total</th>
+          <th>Paiement</th>
+          <th>Statut</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${orders.map(o => `
+          <tr>
+            <td>${o.id}</td>
+            <td>${o.customer.fullname}</td>
+            <td>${o.customer.phone}</td>
+            <td>${o.items.map(i => i.name).join(', ')}</td>
+            <td>${o.total} DHS</td>
+            <td>${o.paymentMethod === 'cod' ? 'À la livraison' : o.paymentMethod === 'whatsapp' ? 'WhatsApp' : 'Carte'}</td>
+            <td><span class="order-status status-${o.status}">${o.status}</span></td>
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>
+  `;
+  
+  container.innerHTML = table;
+}
+
+// Check login on load
+checkLogin();
+</script>
+</body>
+</html>
