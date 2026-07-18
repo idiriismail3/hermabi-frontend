@@ -88,3 +88,20 @@
 </script>
 </body>
 </html>
+
+<script>
+// Refresh products every time page becomes visible
+document.addEventListener('visibilitychange', function() {
+  if (document.visibilityState === 'visible') {
+    location.reload(); // Reload page when user comes back
+  }
+});
+
+// Also reload on page focus
+window.addEventListener('focus', function() {
+  // Refresh the products grid
+  if (typeof renderShop === 'function') {
+    renderShop();
+  }
+});
+</script>
