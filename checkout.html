@@ -330,6 +330,24 @@ function showCardRedirectScreen(orderRef, total){
 }
 
 function showConfirmation(orderRef, total, method){
+  // Save order to localStorage for admin dashboard
+  const ordersKey = 'hermabi_orders';
+  const existingOrders = JSON.parse(localStorage.getItem(ordersKey) || '[]');
+  existingOrders.push({
+    id: orderRef,
+    customer: {
+      fullname: document.querySelector('[name="fullname"]').value,
+      email: document.querySelector('[name="email"]').value,
+      phone: document.querySelector('[name="phone"]').value,
+      address: document.querySelector('[name="address"]').value,
+      city: document.querySelector('[name="city"]').value,
+    },
+    items: getCart(),
+    total: total,
+    paymentMethod: method,
+    status: 'confirmed'
+  });
+  localStorage.setItem(ordersKey, JSON.stringify(existingOrders));
   root.innerHTML = `
     <div class="confirm-box">
       <div class="icon">✓</div>
