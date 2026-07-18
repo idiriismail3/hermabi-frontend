@@ -281,7 +281,16 @@ const existingOrders = JSON.parse(localStorage.getItem(ordersKey) || '[]');
 const newOrder = {
   id: data.orderId,
   customer: customer,
-  items: cart,
+  items: cart.map(item => {
+  const product = getProduct(item.id);
+  return {
+    id: item.id,
+    name: product.name,
+    size: item.size,
+    qty: item.qty,
+    price: product.price
+  };
+}),
   total: total,
   paymentMethod: payment,
   status: 'confirmed'
