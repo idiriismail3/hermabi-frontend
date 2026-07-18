@@ -35,16 +35,33 @@ body { font-family: 'Work Sans', sans-serif; background: var(--stucco); color: v
 .nav-tab.active { color: var(--brass); border-bottom-color: var(--brass); }
 .content { padding: 30px; display: none; }
 .content.active { display: block; }
+.btn-add { background: var(--brass); color: var(--ink); border: none; padding: 12px 24px; border-radius: 6px; cursor: pointer; font-weight: 600; margin-bottom: 20px; }
+.btn-add:hover { background: #E3C765; }
 .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 20px; }
 .product-card { background: var(--stucco-dim); padding: 20px; border-radius: 8px; border: 1px solid var(--line); }
-.product-card img { width: 100%; height: 150px; object-fit: cover; border-radius: 6px; margin-bottom: 15px; }
-.product-card input { width: 100%; padding: 8px; margin-bottom: 10px; background: var(--stucco); border: 1px solid var(--line); border-radius: 4px; color: var(--text); }
-.product-card button { width: 100%; padding: 10px; background: var(--brass); color: var(--ink); border: none; border-radius: 4px; cursor: pointer; font-weight: 600; }
+.product-card img { width: 100%; height: 150px; object-fit: cover; border-radius: 6px; margin-bottom: 10px; }
+.product-card input, .product-card select { width: 100%; padding: 8px; margin-bottom: 10px; background: var(--stucco); border: 1px solid var(--line); border-radius: 4px; color: var(--text); font-size: 12px; }
+.product-card button { width: 100%; padding: 10px; background: var(--brass); color: var(--ink); border: none; border-radius: 4px; cursor: pointer; font-weight: 600; margin-bottom: 5px; }
+.product-card button:hover { background: #E3C765; }
+.modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; align-items: center; justify-content: center; }
+.modal.active { display: flex; }
+.modal-content { background: var(--stucco-dim); padding: 30px; border-radius: 12px; width: 90%; max-width: 600px; border: 1px solid var(--line); max-height: 90vh; overflow-y: auto; }
+.modal-content h2 { color: var(--brass); margin-bottom: 20px; }
+.form-group { margin-bottom: 15px; }
+.form-group label { display: block; color: var(--muted); font-size: 12px; margin-bottom: 5px; }
+.form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px; background: var(--stucco); border: 1px solid var(--line); border-radius: 4px; color: var(--text); }
+.form-group textarea { resize: vertical; min-height: 60px; }
+.image-preview { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 10px; }
+.image-preview img { width: 100%; height: 100px; object-fit: cover; border-radius: 4px; }
 .orders-table { width: 100%; border-collapse: collapse; background: var(--stucco-dim); border: 1px solid var(--line); }
 .orders-table th { background: var(--ink); padding: 15px; text-align: left; color: var(--brass); font-weight: 700; border-bottom: 1px solid var(--line); font-size: 12px; }
 .orders-table td { padding: 15px; border-bottom: 1px solid var(--line); font-size: 13px; }
 .orders-table tr:hover { background: rgba(201, 162, 39, 0.1); }
 .item-box { background: rgba(201,162,39,0.1); padding: 10px; border-radius: 4px; margin: 5px 0; font-size: 12px; }
+.modal-actions { display: flex; gap: 10px; margin-top: 20px; }
+.modal-actions button { flex: 1; padding: 12px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; }
+.btn-save { background: var(--brass); color: var(--ink); }
+.btn-cancel { background: var(--line); color: var(--text); }
 </style>
 </head>
 <body>
@@ -71,6 +88,7 @@ body { font-family: 'Work Sans', sans-serif; background: var(--stucco); color: v
 
   <div id="products-tab" class="content active">
     <h2 style="color: var(--brass); margin-bottom: 20px;">Gestion des Produits</h2>
+    <button class="btn-add" onclick="openAddProductModal()">+ Ajouter un Produit</button>
     <div class="products-grid" id="products-grid"></div>
   </div>
 
@@ -80,9 +98,58 @@ body { font-family: 'Work Sans', sans-serif; background: var(--stucco); color: v
   </div>
 </div>
 
+<!-- Add/Edit Product Modal -->
+<div id="product-modal" class="modal">
+  <div class="modal-content">
+    <h2 id="modal-title">Ajouter un Produit</h2>
+    
+    <div class="form-group">
+      <label>Nom du Produit</label>
+      <input type="text" id="prod-name" placeholder="Ex: Black Catalan Shirt">
+    </div>
+    
+    <div class="form-group">
+      <label>Catégorie</label>
+      <select id="prod-category">
+        <option value="Maillots">Maillots</option>
+        <option value="Pantalons">Pantalons</option>
+        <option value="Accessories">Accessories</option>
+      </select>
+    </div>
+    
+    <div class="form-group">
+      <label>Prix (DHS)</label>
+      <input type="number" id="prod-price" placeholder="199">
+    </div>
+    
+    <div class="form-group">
+      <label>Stock</label>
+      <input type="number" id="prod-stock" placeholder="50">
+    </div>
+    
+    <div class="form-group">
+      <label>Description</label>
+      <textarea id="prod-desc" placeholder="Description du produit"></textarea>
+    </div>
+    
+    <div class="form-group">
+      <label>Photos (Multiple)</label>
+      <input type="file" id="prod-images" accept="image/*" multiple>
+      <div class="image-preview" id="image-preview"></div>
+    </div>
+    
+    <div class="modal-actions">
+      <button class="btn-save" onclick="saveProduct()">Enregistrer</button>
+      <button class="btn-cancel" onclick="closeProductModal()">Annuler</button>
+    </div>
+  </div>
+</div>
+
 <script src="js/store.js"></script>
 <script>
 const ADMIN_PASSWORD = 'hermabi2024';
+let editingProductId = null;
+let productImages = [];
 
 function checkLogin() {
   if (sessionStorage.getItem('admin_logged_in') === 'true') {
@@ -127,20 +194,124 @@ function switchTab(tab) {
   document.getElementById(tab + '-tab').classList.add('active');
 }
 
+function openAddProductModal() {
+  editingProductId = null;
+  productImages = [];
+  document.getElementById('modal-title').textContent = 'Ajouter un Produit';
+  document.getElementById('prod-name').value = '';
+  document.getElementById('prod-price').value = '';
+  document.getElementById('prod-stock').value = '';
+  document.getElementById('prod-desc').value = '';
+  document.getElementById('prod-images').value = '';
+  document.getElementById('image-preview').innerHTML = '';
+  document.getElementById('product-modal').classList.add('active');
+}
+
+function closeProductModal() {
+  document.getElementById('product-modal').classList.remove('active');
+}
+
+document.getElementById('prod-images').addEventListener('change', function(e) {
+  productImages = [];
+  document.getElementById('image-preview').innerHTML = '';
+  
+  Array.from(e.target.files).forEach(file => {
+    const reader = new FileReader();
+    reader.onload = function(event) {
+      productImages.push(event.target.result);
+      const img = document.createElement('img');
+      img.src = event.target.result;
+      document.getElementById('image-preview').appendChild(img);
+    };
+    reader.readAsDataURL(file);
+  });
+});
+
+function saveProduct() {
+  const name = document.getElementById('prod-name').value;
+  const category = document.getElementById('prod-category').value;
+  const price = parseInt(document.getElementById('prod-price').value);
+  const stock = parseInt(document.getElementById('prod-stock').value);
+  const desc = document.getElementById('prod-desc').value;
+  
+  if (!name || !price || !stock || productImages.length === 0) {
+    alert('Remplissez tous les champs et ajoutez au moins une image');
+    return;
+  }
+  
+  const products = getProducts();
+  
+  if (editingProductId) {
+    const product = products.find(p => p.id === editingProductId);
+    product.name = name;
+    product.cat = category;
+    product.price = price;
+    product.stock = stock;
+    product.desc = desc;
+    product.img = productImages[0];
+    product.images = productImages;
+  } else {
+    const newId = Math.max(...products.map(p => p.id), 0) + 1;
+    products.push({
+      id: newId,
+      name: name,
+      cat: category,
+      price: price,
+      stock: stock,
+      desc: desc,
+      img: productImages[0],
+      images: productImages
+    });
+  }
+  
+  saveProducts(products);
+  loadProducts();
+  closeProductModal();
+  alert('Produit enregistré');
+}
+
 function loadProducts() {
   const products = getProducts();
   const grid = document.getElementById('products-grid');
   grid.innerHTML = products.map(p => `
     <div class="product-card">
       <img src="${p.img}" alt="${p.name}">
-      <h3 style="margin-bottom: 10px; color: var(--cream);">${p.name}</h3>
+      <h3 style="margin-bottom: 10px; color: var(--cream); font-size: 14px;">${p.name}</h3>
+      <div style="font-size: 11px; color: var(--muted); margin-bottom: 10px;">${p.cat}</div>
       <label style="color: var(--muted); font-size: 11px;">Prix (DHS)</label>
       <input type="number" value="${p.price}" onchange="updatePrice(${p.id}, this.value)">
       <label style="color: var(--muted); font-size: 11px;">Stock</label>
       <input type="number" value="${p.stock}" onchange="updateStock(${p.id}, this.value)">
-      <button onclick="deleteProduct(${p.id})">Supprimer</button>
+      <button onclick="editProduct(${p.id})">Éditer</button>
+      <button onclick="deleteProduct(${p.id})" style="background: var(--error); margin-bottom: 0;">Supprimer</button>
     </div>
   `).join('');
+}
+
+function editProduct(id) {
+  const products = getProducts();
+  const product = products.find(p => p.id === id);
+  if (!product) return;
+  
+  editingProductId = id;
+  productImages = product.images || [product.img];
+  
+  document.getElementById('modal-title').textContent = 'Éditer le Produit';
+  document.getElementById('prod-name').value = product.name;
+  document.getElementById('prod-category').value = product.cat;
+  document.getElementById('prod-price').value = product.price;
+  document.getElementById('prod-stock').value = product.stock;
+  document.getElementById('prod-desc').value = product.desc || '';
+  
+  const preview = document.getElementById('image-preview');
+  preview.innerHTML = '';
+  productImages.forEach(img => {
+    const imgEl = document.createElement('img');
+    imgEl.src = img;
+    preview.appendChild(imgEl);
+  });
+  
+  document.getElementById('product-modal').classList.add('active');
 }
 
 function updatePrice(id, newPrice) {
@@ -149,7 +320,6 @@ function updatePrice(id, newPrice) {
   if (product) {
     product.price = parseInt(newPrice);
     saveProducts(products);
-    alert('Prix mis à jour');
   }
 }
 
@@ -159,7 +329,6 @@ function updateStock(id, newStock) {
   if (product) {
     product.stock = parseInt(newStock);
     saveProducts(products);
-    alert('Stock mis à jour');
   }
 }
 
