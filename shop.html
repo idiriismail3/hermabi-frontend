@@ -101,6 +101,7 @@ document.addEventListener('visibilitychange', function() {
 window.addEventListener('focus', function() {
   // Refresh the products grid
   if (typeof renderShop === 'function') {
+    const products = getProducts();
     renderShop();
   }
 });
