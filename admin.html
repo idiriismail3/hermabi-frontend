@@ -234,23 +234,35 @@ function saveProduct() {
   const stock = parseInt(document.getElementById('prod-stock').value);
   const desc = document.getElementById('prod-desc').value;
   
-  if (!name || !price || !stock || productImages.length === 0) {
-    alert('Remplissez tous les champs et ajoutez au moins une image');
+  if (!name || !price || !stock) {
+    alert('Remplissez tous les champs');
+    return;
+  }
+  
+  // If adding new product, images are required
+  if (!editingProductId && productImages.length === 0) {
+    alert('Ajoutez au moins une image');
     return;
   }
   
   const products = getProducts();
   
   if (editingProductId) {
+    // Editing - keep old images if no new ones selected
     const product = products.find(p => p.id === editingProductId);
     product.name = name;
     product.cat = category;
     product.price = price;
     product.stock = stock;
     product.desc = desc;
-    product.img = productImages[0];
-    product.images = productImages;
+    
+    // Only update images if new ones were selected
+    if (productImages.length > 0) {
+      product.img = productImages[0];
+      product.images = productImages;
+    }
   } else {
+    // Adding new product
     const newId = Math.max(...products.map(p => p.id), 0) + 1;
     products.push({
       id: newId,
@@ -263,6 +275,12 @@ function saveProduct() {
       images: productImages
     });
   }
+  
+  saveProducts(products);
+  loadProducts();
+  closeProductModal();
+  alert('Produit enregistré');
+}
   
   saveProducts(products);
   loadProducts();
