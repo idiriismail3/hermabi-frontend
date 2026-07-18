@@ -166,15 +166,23 @@ function renderCheckoutForm(){
     </div>
   `;
 
-  // Payment option toggle
   document.querySelectorAll('.pay-option').forEach(opt => {
-    opt.addEventListener('click', () => {
-      document.querySelectorAll('.pay-option').forEach(o => o.classList.remove('selected'));
-      opt.classList.add('selected');
-      opt.querySelector('input').checked = true;
-      document.getElementById('card-fields').classList.toggle('show', opt.dataset.opt === 'card');
-    });
+  opt.addEventListener('click', () => {
+    document.querySelectorAll('.pay-option').forEach(o => o.classList.remove('selected'));
+    opt.classList.add('selected');
+    opt.querySelector('input').checked = true;
+    // Show/hide payment info based on selection
+    const whatsappInfo = document.getElementById('whatsapp-info');
+    const codInfo = document.getElementById('cod-info');
+    if (opt.dataset.opt === 'whatsapp') {
+      whatsappInfo.style.display = 'block';
+      codInfo.style.display = 'none';
+    } else if (opt.dataset.opt === 'cod') {
+      whatsappInfo.style.display = 'none';
+      codInfo.style.display = 'block';
+    }
   });
+});
 
   document.getElementById('checkout-form').addEventListener('submit', handleSubmit);
 }
