@@ -120,10 +120,10 @@ body { font-family: 'Work Sans', sans-serif; background: var(--stucco); color: v
       <textarea id="prod-desc"></textarea>
     </div>
     <div class="form-group">
-      <label>Photos (Multiple)</label>
-      <input type="file" id="prod-images" accept="image/*" multiple>
-      <div class="image-preview" id="image-preview"></div>
-    </div>
+        <label>Photos (Référence - non stockées)</label>
+        <p style="font-size: 11px; color: var(--muted);">Pour changer l'image du produit, remplacez le fichier dans le dossier /images</p>
+        <input type="file" id="prod-images" accept="image/*" multiple disabled style="opacity: 0.5;">
+      </div>
     <div class="modal-actions">
       <button class="btn-save" onclick="saveProduct()">Enregistrer</button>
       <button class="btn-cancel" onclick="closeProductModal()">Annuler</button>
@@ -229,9 +229,9 @@ function saveProduct() {
     product.price = price;
     product.stock = stock;
     product.desc = desc;
-    if (productImages.length > 0) {
-      product.img = productImages[0];
-      product.images = productImages;
+    // Don't save images - just use placeholder
+    if (!product.img) {
+      product.img = 'images/hermabi-01.jpg';
     }
   } else {
     const newId = Math.max(...products.map(p => p.id), 0) + 1;
@@ -242,8 +242,7 @@ function saveProduct() {
       price: price,
       stock: stock,
       desc: desc,
-      img: productImages[0],
-      images: productImages
+      img: 'images/hermabi-01.jpg' // Use placeholder image
     });
   }
   
