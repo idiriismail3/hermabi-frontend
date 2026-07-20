@@ -3,7 +3,7 @@
    Pulled straight from the brand medallion: black enamel background, gold
    engraving, deep bottle-green peaks, and a muted oxblood red accent.
    ========================================================================== */
-   @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
+  
 
    :root {
     --stucco: #121110;
@@ -23,18 +23,16 @@
   }
   
   body {
-    font-family: var(--font-body);
+    font-family: 'Poppins', sans-serif;
     background: var(--stucco);
     color: var(--text);
     font-size: 16px;
     line-height: 1.6;
-    letter-spacing: 0.3px;
   }
   
   h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-display);
+    font-family: 'Playfair Display', serif;
     font-weight: 700;
-    line-height: 1.2;
     letter-spacing: 0.05em;
   }
   
@@ -132,12 +130,33 @@ h1,h2,h3,h4{
 }
 .nav-links a:hover::after{ width:100%; }
 .nav-right{ display:flex; align-items:center; gap:22px; }
-.cart-link{ position:relative; display:flex; align-items:center; gap:8px; font-size:13px; letter-spacing:.08em; text-transform:uppercase; font-weight:600;}
-.cart-count{
-  background: var(--bottle); color: var(--cream);
-  font-size: 11px; min-width:18px; height:18px; border-radius:50%;
-  display:flex; align-items:center; justify-content:center;
-  padding: 0 2px;
+.cart-link {
+  color: var(--brass);
+  text-decoration: none;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.cart-link:hover {
+  background: rgba(201, 162, 39, 0.1);
+}
+
+.cart-count {
+  background: var(--brass);
+  color: var(--ink);
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
 }
 .burger{ display:none; background:none; border:none; }
 
@@ -387,3 +406,22 @@ select, input[type=text], input[type=tel], input[type=email], textarea{
 .toast.show{ transform: translateY(0); }
 
 .skip{ font-size:13px; color: var(--bottle); text-decoration:underline; }
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+/* Product names should be blue/purple but no underline */
+.collection-card-name {
+  text-decoration: none;
+  color: var(--cream);
+}
+
+.product-card-name {
+  text-decoration: none;
+  color: var(--cream);
+}

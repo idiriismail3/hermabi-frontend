@@ -117,8 +117,13 @@ document.getElementById('add-btn').addEventListener('click', () => {
   
   // Add animation
   const btn = document.getElementById('add-btn');
-  btn.style.transform = 'scale(1.1)';
-  setTimeout(() => btn.style.transform = 'scale(1)', 200);
+  btn.style.transform = 'scale(1.05)';
+  btn.style.boxShadow = '0 0 20px var(--brass)';
+  
+  setTimeout(() => {
+    btn.style.transform = 'scale(1)';
+    btn.style.boxShadow = 'none';
+  }, 300);
   
   // Add to cart
   addToCart(product.id, qty);
