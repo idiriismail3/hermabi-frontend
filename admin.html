@@ -120,10 +120,8 @@ body { font-family: 'Work Sans', sans-serif; background: var(--stucco); color: v
       <textarea id="prod-desc"></textarea>
     </div>
     <div class="form-group">
-        <label>Télécharger Image</label>
-        <input type="file" id="prod-images" accept="image/*">
-        <button type="button" onclick="uploadImage()" style="margin-top: 10px; width: 100%; padding: 10px; background: var(--brass); color: var(--ink); border: none; cursor: pointer; font-weight: 600;">📤 Télécharger</button>
-        <div id="upload-status" style="margin-top: 10px; color: var(--brass); font-size: 12px;"></div>
+        <label>URL Image (ou nom de fichier)</label>
+        <input type="text" id="prod-img-url" placeholder="images/shirt-01.jpg ou https://...">
       </div>
     <div class="modal-actions">
       <button class="btn-save" onclick="saveProduct()">Enregistrer</button>
@@ -189,20 +187,7 @@ function closeProductModal() {
   document.getElementById('product-modal').classList.remove('active');
 }
 
-document.getElementById('prod-images').addEventListener('change', function(e) {
-  productImages = [];
-  document.getElementById('image-preview').innerHTML = '';
-  Array.from(e.target.files).forEach(file => {
-    const reader = new FileReader();
-    reader.onload = function(event) {
-      productImages.push(event.target.result);
-      const img = document.createElement('img');
-      img.src = event.target.result;
-      document.getElementById('image-preview').appendChild(img);
-    };
-    reader.readAsDataURL(file);
-  });
-});
+
 
 function saveProduct() {
   const name = document.getElementById('prod-name').value;
@@ -242,7 +227,7 @@ function saveProduct() {
       price: price,
       stock: stock,
       desc: desc,
-      img: uploadedImageUrl
+      img: document.getElementById('prod-img-url').value || 'images/hermabi-01.jpg'
     });
   }
   
