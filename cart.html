@@ -10,6 +10,7 @@
 </head>
 <body>
 
+
 <div class="motif-strip"></div>
 <header class="site-header">
   <nav class="nav">
@@ -24,6 +25,36 @@
     </div>
   </nav>
 </header>
+<!-- Panier Notification -->
+<div id="panier-notification" style="display: none; position: fixed; top: 100px; right: 20px; background: var(--brass); color: var(--ink); padding: 16px 24px; border-radius: 8px; z-index: 999; animation: slideInRight 0.4s ease-out; box-shadow: 0 8px 24px rgba(0,0,0,0.3);">
+  <div style="font-weight: 600; margin-bottom: 4px;" id="notification-text"></div>
+  <div style="font-size: 12px; opacity: 0.8;">Ajouté au panier ✓</div>
+</div>
+
+<style>
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+</style>
+
+<script>
+function showPanierNotification(productName) {
+  const notif = document.getElementById('panier-notification');
+  document.getElementById('notification-text').textContent = productName;
+  notif.style.display = 'block';
+  
+  setTimeout(() => {
+    notif.style.display = 'none';
+  }, 3000);
+}
+</script>
 
 <div class="wrap">
   <h1 style="padding-top:50px; font-size:34px;">Votre panier</h1>
