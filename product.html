@@ -7,6 +7,26 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
+<style>
+  /* Add to cart animation */
+  #add-btn {
+    transition: transform 0.2s ease;
+  }
+  
+  /* Modal animation */
+  #added-modal {
+    animation: fadeIn 0.3s ease;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  </style>
 </head>
 <body>
 
@@ -94,10 +114,40 @@ qtySelect.addEventListener('change', () => {
 });
 document.getElementById('add-btn').addEventListener('click', () => {
   qty = parseInt(qtySelect.value);
+  
+  // Add animation
+  const btn = document.getElementById('add-btn');
+  btn.style.transform = 'scale(1.1)';
+  setTimeout(() => btn.style.transform = 'scale(1)', 200);
+  
+  // Add to cart
   addToCart(product.id, qty);
-  showToast(`${product.name} (Quantité: ${qty}) ajouté au panier`);
+  
+  // Show modal
+  showAddedModal(product.name, qty);
 });
   }
+  function showAddedModal(productName, qty) {
+  document.getElementById('added-text').textContent = `${productName} × ${qty}`;
+  document.getElementById('added-modal').style.display = 'flex';
+  
+  // Auto-close after 5 seconds if user doesn't click
+  setTimeout(() => {
+    document.getElementById('added-modal').style.display = 'none';
+  }, 5000);
+}
 </script>
+<!-- Product Added Modal -->
+<div id="added-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; align-items: center; justify-content: center;">
+  <div style="background: var(--stucco-dim); padding: 40px; border-radius: 12px; text-align: center; max-width: 400px; border: 1px solid var(--line);">
+    <div style="font-size: 48px; margin-bottom: 20px;">✓</div>
+    <h2 style="color: var(--brass); margin-bottom: 10px;" id="added-text"></h2>
+    <p style="color: var(--muted); margin-bottom: 30px;">ajouté au panier</p>
+    <div style="display: flex; gap: 10px;">
+      <button onclick="document.getElementById('added-modal').style.display='none'; location.href='shop.html'" style="flex: 1; padding: 12px; background: var(--brass); color: var(--ink); border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">Continuer mes achats</button>
+      <button onclick="document.getElementById('added-modal').style.display='none'; location.href='cart.html'" style="flex: 1; padding: 12px; background: var(--line); color: var(--text); border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">Voir le panier</button>
+    </div>
+  </div>
+</div>
 </body>
 </html>
