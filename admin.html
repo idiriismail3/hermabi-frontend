@@ -120,9 +120,10 @@ body { font-family: 'Work Sans', sans-serif; background: var(--stucco); color: v
       <textarea id="prod-desc"></textarea>
     </div>
     <div class="form-group">
-        <label>Photos (Référence - non stockées)</label>
-        <p style="font-size: 11px; color: var(--muted);">Pour changer l'image du produit, remplacez le fichier dans le dossier /images</p>
-        <input type="file" id="prod-images" accept="image/*" multiple style="opacity: 0.7;">
+        <label>Télécharger Image</label>
+        <input type="file" id="prod-images" accept="image/*">
+        <button type="button" onclick="uploadImage()" style="margin-top: 10px; width: 100%; padding: 10px; background: var(--brass); color: var(--ink); border: none; cursor: pointer; font-weight: 600;">📤 Télécharger</button>
+        <div id="upload-status" style="margin-top: 10px; color: var(--brass); font-size: 12px;"></div>
       </div>
     <div class="modal-actions">
       <button class="btn-save" onclick="saveProduct()">Enregistrer</button>
@@ -135,6 +136,7 @@ body { font-family: 'Work Sans', sans-serif; background: var(--stucco); color: v
 <script>
 const ADMIN_PASSWORD = 'hermabi2024';
 let editingProductId = null;
+let uploadedImageUrl = '';
 let productImages = [];
 
 function login() {
@@ -214,8 +216,8 @@ function saveProduct() {
     return;
   }
   
-  if (!editingProductId && productImages.length === 0) {
-    alert('Ajoutez au moins une image');
+  if (!editingProductId && !uploadedImageUrl) {
+    alert('Téléchargez une image');
     return;
   }
   
@@ -228,9 +230,8 @@ function saveProduct() {
     product.price = price;
     product.stock = stock;
     product.desc = desc;
-    // Don't save images - just use placeholder
-    if (!product.img) {
-      product.img = 'images/hermabi-01.jpg';
+    if (uploadedImageUrl) {
+      product.img = uploadedImageUrl;
     }
   } else {
     const newId = Math.max(...products.map(p => p.id), 0) + 1;
@@ -241,12 +242,14 @@ function saveProduct() {
       price: price,
       stock: stock,
       desc: desc,
-      img: 'images/hermabi-01.jpg' // Use placeholder image
+      img: uploadedImageUrl
     });
   }
   
   saveProducts(products);
   loadProducts();
+  uploadedImageUrl = '';
+  document.getElementById('upload-status').textContent = '';
   closeProductModal();
   alert('Produit enregistré');
 }
@@ -329,6 +332,36 @@ if (sessionStorage.getItem('admin_logged_in') === 'true') {
   showDashboard();
 } else {
   showLogin();
+}
+function uploadImage() {
+  const file = document.getElementById('prod-images').files[0];
+  if (!file) {
+    alert('Sélectionnez une image');
+    return;
+  }
+  
+  const formData = new FormData();
+  formData.append('image', file);
+  
+  document.getElementById('upload-status').textContent = 'Téléchargement...';
+  
+  fetch('https://hermabi-backend1.onrender.com/api/upload', {
+    method: 'POST',
+    body: formData
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.success) {
+      uploadedImageUrl = data.imageUrl;
+      document.getElementById('upload-status').textContent = '✓ Image téléchargée';
+    } else {
+      alert('Erreur: ' + data.error);
+    }
+  })
+  .catch(err => {
+    alert('Erreur upload: ' + err);
+    document.getElementById('upload-status').textContent = '';
+  });
 }
 </script>
 </body>
