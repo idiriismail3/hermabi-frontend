@@ -31,7 +31,7 @@
   }
   
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Bodoni Moda', serif;
     font-weight: 700;
     letter-spacing: 0.05em;
   }
@@ -134,29 +134,36 @@ h1,h2,h3,h4{
   color: var(--brass);
   text-decoration: none;
   font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 8px 16px;
-  border-radius: 4px;
+  gap: 12px;
+  padding: 10px 16px;
+  border: 1px solid var(--brass);
+  border-radius: 6px;
   transition: all 0.3s ease;
+  position: relative;
 }
 
 .cart-link:hover {
   background: rgba(201, 162, 39, 0.1);
+  transform: translateY(-2px);
 }
 
 .cart-count {
   background: var(--brass);
   color: var(--ink);
   border-radius: 50%;
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
+  min-width: 20px;
 }
 .burger{ display:none; background:none; border:none; }
 
@@ -164,6 +171,7 @@ h1,h2,h3,h4{
   .nav-links{ display:none; }
   .burger{ display:block; }
 }
+
 
 /* ==========================================================================
    Buttons
