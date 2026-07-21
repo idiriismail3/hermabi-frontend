@@ -54,7 +54,7 @@
   <div class="wrap">
     <div class="footer-bottom">
       <span>© 2026 Hermabi. Tous droits réservés.</span>
-      <span>Casablanca, Maroc</span>
+      <span>Tetouane, Maroc</span>
     </div>
   </div>
 </footer>
@@ -115,7 +115,7 @@ function renderCheckoutForm(){
           <div class="field-row">
             <div class="field" data-field="city">
               <label>Ville <span class="req">*</span></label>
-              <input type="text" name="city" placeholder="Casablanca">
+              <input type="text" name="city" placeholder="Tetouane">
               <span class="error-msg">Merci d'indiquer votre ville.</span>
             </div>
             <div class="field" data-field="postal">
@@ -125,57 +125,21 @@ function renderCheckoutForm(){
           </div>
         </div>
 
-        <h3><span class="num">3</span> Mode de paiement</h3>
-          <p style="font-size:13px; color:var(--muted); margin:-8px 0 16px;">Choisissez votre méthode de paiement ci-dessous.</p>
-<div class="pay-options">
-  <label class="pay-option selected" data-opt="whatsapp">
-    <input type="radio" name="payment" value="whatsapp" checked>
-    <div>
-      <div class="title">💬 WhatsApp</div>
-      <div class="desc">Confirmez votre commande via WhatsApp et payez facilement.</div>
-    </div>
-  </label>
-</div>
-
-<!-- WhatsApp Information -->
-<div id="whatsapp-info" style="background: #d4f8d4; padding: 20px; border-radius: 8px; margin-top: 20px; display: block;">
-  <h4 style="color: #25D366; margin-top: 0; margin-bottom: 15px;">💬 Contacter sur WhatsApp</h4>
-  <p style="margin: 0; font-size: 14px; color: #333;">
-    Après avoir cliqué sur "Confirmer la commande", vous serez redirigé vers WhatsApp pour finaliser votre paiement.
+<!-- Payment Confirmation -->
+<div style="background: linear-gradient(135deg, rgba(201,162,39,0.1) 0%, rgba(201,162,39,0.05) 100%); padding: 24px; border-radius: 12px; border: 1px solid var(--brass); margin-top: 30px;">
+  <h3 style="color: var(--brass); margin-bottom: 16px; font-size: 16px;">💬 Confirmation par WhatsApp</h3>
+  <p style="color: var(--cream); margin-bottom: 20px; font-size: 14px; line-height: 1.6;">
+    Cliquez sur le bouton ci-dessous pour confirmer votre commande. Vous serez redirigé vers WhatsApp pour finaliser le paiement avec notre équipe.
   </p>
+  <button type="submit" class="btn brass block" style="padding: 16px; font-size: 16px;">Confirmer la commande</button>
 </div>
 
-          <!-- COD Information -->
-       
-<div id="cod-info" style="display: none; background: #d4edda; padding: 15px; border-radius: 8px; margin-top: 20px;">
-  <p style="margin: 0; color: #155724; font-size: 13px;">💵 Vous payerez le montant en espèces à la livraison. Aucun paiement préalable nécessaire.</p>
-</div>
-          <button type="submit" class="btn brass block" style="margin-top: 24px;">Confirmer la commande</button>
-      </form>
-        <div class="summary-row" style="border-top:1px solid var(--line); padding-top:14px; margin-top:6px;"><span>Sous-total</span><span>${fmtPrice(sub)}</span></div>
-        <div class="summary-row"><span>Livraison</span><span>${ship===0?'Offerte':fmtPrice(ship)}</span></div>
-        <div class="summary-row total"><span>Total</span><span>${fmtPrice(total)}</span></div>
-      </div>
-    </div>
+<!-- Summary (outside form) -->
+<div class="summary-row" style="border-top:1px solid var(--line); padding-top:14px; margin-top:24px;"><span>Sous-total</span><span>${fmtPrice(sub)}</span></div>
+<div class="summary-row"><span>Livraison</span><span>${ship===0?'Offerte':fmtPrice(ship)}</span></div>
+<div class="summary-row total"><span>Total</span><span>${fmtPrice(total)}</span></div>
   `;
 
-  document.querySelectorAll('.pay-option').forEach(opt => {
-  opt.addEventListener('click', () => {
-    document.querySelectorAll('.pay-option').forEach(o => o.classList.remove('selected'));
-    opt.classList.add('selected');
-    opt.querySelector('input').checked = true;
-    // Show/hide payment info based on selection
-    const whatsappInfo = document.getElementById('whatsapp-info');
-    const codInfo = document.getElementById('cod-info');
-    if (opt.dataset.opt === 'whatsapp') {
-      whatsappInfo.style.display = 'block';
-      codInfo.style.display = 'none';
-    } else if (opt.dataset.opt === 'cod') {
-      whatsappInfo.style.display = 'none';
-      codInfo.style.display = 'block';
-    }
-  });
-});
 
   document.getElementById('checkout-form').addEventListener('submit', handleSubmit);
 }
