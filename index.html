@@ -283,23 +283,39 @@
   </div>
 </section>
 
-<!-- Collections -->
-<div class="collections-wrap">
-  <div class="collection-group">
-    <h2 class="collection-title">Maillots Collection</h2>
-    <div class="collection-cards" id="maillots-grid"></div>
+<!-- Our Collection Section -->
+<section style="padding: 80px 32px; background: var(--stucco);">
+  <div class="wrap" style="max-width: 1400px; margin: 0 auto;">
+    <h2 class="collection-heading" id="collection-title">OUR COLLECTION</h2>
+    
+    <!-- Products Grid -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px;" id="collection-grid">
+      <!-- Products will load here -->
+    </div>
   </div>
+</section>
 
-  <div class="collection-group">
-    <h2 class="collection-title">Pantalons Collection</h2>
-    <div class="collection-cards" id="pantalons-grid"></div>
-  </div>
+<script src="js/store.js"></script>
+<script>
+// Load all products dynamically
+function loadCollectionProducts() {
+  const products = getProducts();
+  const grid = document.getElementById('collection-grid');
+  
+  grid.innerHTML = products.map(p => `
+    <div class="collection-card">
+      <a href="product.html?id=${p.id}">
+        <img src="${p.img}" alt="${p.name}">
+        <h3 class="collection-card-name">${p.name}</h3>
+        <p style="color: var(--brass); font-weight: 600;">${p.price}.00 DHS</p>
+      </a>
+    </div>
+  `).join('');
+}
 
-  <div class="collection-group">
-    <h2 class="collection-title">Sélection Complète</h2>
-    <div class="collection-cards" id="all-grid"></div>
-  </div>
-</div>
+// Load on page load
+window.addEventListener('load', loadCollectionProducts);
+</script>
 
 
 
