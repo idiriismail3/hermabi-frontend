@@ -577,3 +577,14 @@ a:hover {
     background-attachment: fixed;
   }
 }
+
+/* Collection heading - OUR COLLECTION */
+.collection-heading {
+  font-family: 'Montserrat', sans-serif;
+  font-size: clamp(20px, 3.5vw, 32px);
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--cream);
+  margin-bottom: 40px;
+}
