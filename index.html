@@ -4,10 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Hermabi — Modern Moroccan Fashion</title>
-<meta name="description" content="Hermabi — Modern Moroccan Fashion. Streetwear marocain, maillots et pantalons oversize. Paiement par carte bancaire ou à la livraison.">
+<meta name="description" content="Hermabi — Modern Moroccan Fashion.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Playfair+Display:wght@700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
 /* Homepage-specific additions */
 /* Hero with image carousel */
@@ -275,37 +274,149 @@
   </div>
   <div class="hero-overlay"></div>
   <div class="hero-content">
-    <h1 style="font-family: 'Playfair Display', serif; font-size: clamp(48px, 8vw, 84px); font-weight: 700; letter-spacing: 0.02em; color: var(--brass); text-transform: uppercase; margin: 0 0 20px;">HERMABI</h1>
-    <p class="hero-subtitle">Moroccan Tailoring × Catalan Design</p>
+    <h1 id="hero-title" class="hero-title"></h1>
+    <p class="hero-subtitle"></p>
     <div class="cta">
       <a href="shop.html" class="btn brass">Explore Collection</a>
     </div>
   </div>
 </section>
+</section>
 
-<!-- Collections -->
-<div class="collections-wrap">
-  <div class="collection-group">
-    <h2 class="collection-title">Maillots Collection</h2>
-    <div class="collection-cards" id="maillots-grid"></div>
-  </div>
+<script>
+// Animate hero title letter by letter
+function animateHeroText() {
+  const title = document.getElementById('hero-title');
+  const text = 'HERMABI';
+  title.innerHTML = '';
+  let index = 0;
+  
+  function reveal() {
+    if (index < text.length) {
+      const char = text[index];
+      const span = document.createElement('span');
+      span.textContent = char;
+      span.className = 'reveal-text';
+      span.style.animationDelay = (index * 0.08) + 's';
+      title.appendChild(span);
+      index++;
+      setTimeout(reveal, 80);
+    }
+  }
+  reveal();
+}
 
-  <div class="collection-group">
-    <h2 class="collection-title">Pantalons Collection</h2>
-    <div class="collection-cards" id="pantalons-grid"></div>
-  </div>
+animateHeroText();
+</script>
 
-  <div class="collection-group">
-    <h2 class="collection-title">Sélection Complète</h2>
-    <div class="collection-cards" id="all-grid"></div>
+<!-- Our Collection Section -->
+
+<!-- Our Collection Section -->
+<section style="padding: 80px 32px; background: var(--stucco);">
+  <div class="wrap" style="max-width: 1400px; margin: 0 auto;">
+    <h2 class="collection-heading" id="collection-title">OUR COLLECTION</h2>
+    
+    <!-- Products Grid -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px;">
+      <div class="collection-card">
+        <a href="product.html?id=1">
+          <img src="images/shirt-01.jpg" alt="Black Catalan Shirt">
+          <h3 class="collection-card-name">Black Catalan Shirt Classic</h3>
+          <p style="color: var(--brass); font-weight: 600;">199.00 DHS</p>
+        </a>
+      </div>
+
+      <div class="collection-card">
+        <a href="product.html?id=2">
+          <img src="images/shirt-02.jpg" alt="Burgundy Catalan Shirt">
+          <h3 class="collection-card-name">Burgundy Catalan Shirt Premium</h3>
+          <p style="color: var(--brass); font-weight: 600;">199.00 DHS</p>
+        </a>
+      </div>
+
+      <div class="collection-card">
+        <a href="product.html?id=3">
+          <img src="images/shirt-03.jpg" alt="Beige Catalan Shirt">
+          <h3 class="collection-card-name">Beige Catalan Shirt Elegant</h3>
+          <p style="color: var(--brass); font-weight: 600;">199.00 DHS</p>
+        </a>
+      </div>
+
+      <div class="collection-card">
+        <a href="product.html?id=4">
+          <img src="images/shirt-04.jpg" alt="Navy Blue Catalan Shirt">
+          <h3 class="collection-card-name">Navy Blue Catalan Shirt Statement</h3>
+          <p style="color: var(--brass); font-weight: 600;">199.00 DHS</p>
+        </a>
+      </div>
+
+      <div class="collection-card">
+        <a href="product.html?id=5">
+          <img src="images/shirt-05.jpg" alt="Charcoal Catalan Shirt">
+          <h3 class="collection-card-name">Charcoal Catalan Shirt Limited</h3>
+          <p style="color: var(--brass); font-weight: 600;">199.00 DHS</p>
+        </a>
+      </div>
+
+      <div class="collection-card">
+        <a href="product.html?id=6">
+          <img src="images/hermabi-11.jpg" alt="Black Fluid Pants">
+          <h3 class="collection-card-name">Black Fluid Pants</h3>
+          <p style="color: var(--brass); font-weight: 600;">199.00 DHS</p>
+        </a>
+      </div>
+
+      <div class="collection-card">
+        <a href="product.html?id=7">
+          <img src="images/hermabi-12.jpg" alt="Black Cargo Pants">
+          <h3 class="collection-card-name">Black Cargo Pants</h3>
+          <p style="color: var(--brass); font-weight: 600;">199.00 DHS</p>
+        </a>
+      </div>
+
+      <div class="collection-card">
+        <a href="product.html?id=8">
+          <img src="images/sunglasses.png" alt="Designer Sunglasses">
+          <h3 class="collection-card-name">Designer Sunglasses</h3>
+          <p style="color: var(--brass); font-weight: 600;">100.00 DHS</p>
+        </a>
+      </div>
+    </div>
   </div>
-</div>
+</section>
+
+<script>
+// Animate collection title letter by letter
+function animateText(element, text) {
+  element.innerHTML = '';
+  let index = 0;
+  
+  function reveal() {
+    if (index < text.length) {
+      const char = text[index];
+      const span = document.createElement('span');
+      span.textContent = char;
+      span.className = 'reveal-text';
+      span.style.animationDelay = (index * 0.05) + 's';
+      element.appendChild(span);
+      index++;
+      setTimeout(reveal, 50);
+    }
+  }
+  reveal();
+}
+
+// Animate on page load
+window.addEventListener('load', () => {
+  animateText(document.getElementById('collection-title'), 'OUR COLLECTION');
+});
+</script>
 
 
 
 <!-- Tagline -->
 <section class="tagline-section">
-  <h2 class="tagline">Choose Your Own Style Tio</h2>
+  <h2 class="tagline">Choose Your Own Style Tio !</h2>
 </section>
 
 <!-- Socials -->
