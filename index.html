@@ -267,7 +267,6 @@
   </nav>
 </header>
 
-<!-- Hero with image carousel -->
 <section class="hero-image hero-carousel">
   <div class="carousel-container">
     <img src="images/model-01.jpg" alt="Hermabi Model 1" class="carousel-image active">
@@ -275,13 +274,64 @@
   </div>
   <div class="hero-overlay"></div>
   <div class="hero-content">
-    <h1 style="font-family: 'Playfair Display', serif; font-size: clamp(48px, 8vw, 84px); font-weight: 700; letter-spacing: 0.02em; color: var(--brass); text-transform: uppercase; margin: 0 0 20px;">HERMABI</h1>
-    <p class="hero-subtitle">Moroccan Tailoring × Catalan Design</p>
+    <h1 id="hero-title" class="hero-title"></h1>
+    <p class="hero-subtitle">MOROCCAN TAILORING × CATALAN DESIGN</p>
     <div class="cta">
       <a href="shop.html" class="btn brass">Explore Collection</a>
     </div>
   </div>
 </section>
+
+<script>
+// Text reveal animation
+function animateText(elementId, text, delay = 0) {
+  const element = document.getElementById(elementId);
+  element.innerHTML = '';
+  let index = 0;
+  
+  setTimeout(() => {
+    function reveal() {
+      if (index < text.length) {
+        const char = text[index];
+        const span = document.createElement('span');
+        span.textContent = char;
+        span.style.display = 'inline-block';
+        span.style.opacity = '0';
+        span.style.animation = `fadeInChar 0.1s ease-out forwards`;
+        span.style.animationDelay = (index * 0.05) + 's';
+        element.appendChild(span);
+        index++;
+      }
+    }
+    
+    const interval = setInterval(() => {
+      reveal();
+      if (index >= text.length) clearInterval(interval);
+    }, 50);
+  }, delay);
+}
+
+// Animation keyframe
+const style = document.createElement('style');
+style.textContent = `
+  @keyframes fadeInChar {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+`;
+document.head.appendChild(style);
+
+// Start animations on load
+window.addEventListener('load', () => {
+  animateText('hero-title', 'HERMABI', 300);
+});
+</script>
 
 <!-- Our Collection Section -->
 <section style="padding: 80px 32px; background: var(--stucco);">
@@ -294,6 +344,41 @@
     </div>
   </div>
 </section>
+
+<script>
+// Animate collection heading
+function animateCollectionHeading() {
+  const heading = document.getElementById('collection-title');
+  if (!heading) return;
+  
+  const text = heading.textContent;
+  heading.innerHTML = '';
+  let index = 0;
+  
+  function reveal() {
+    if (index < text.length) {
+      const char = text[index];
+      const span = document.createElement('span');
+      span.textContent = char;
+      span.style.display = 'inline-block';
+      span.style.opacity = '0';
+      span.style.animation = `fadeInChar 0.1s ease-out forwards`;
+      span.style.animationDelay = (index * 0.05) + 's';
+      heading.appendChild(span);
+      index++;
+    }
+  }
+  
+  const interval = setInterval(() => {
+    reveal();
+    if (index >= text.length) clearInterval(interval);
+  }, 50);
+}
+
+window.addEventListener('load', () => {
+  setTimeout(animateCollectionHeading, 800);
+});
+</script>
 
 <script src="js/store.js"></script>
 <script>

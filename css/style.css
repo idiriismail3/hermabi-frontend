@@ -551,12 +551,14 @@ a:hover {
 
 .collection-card h3 {
   padding: 16px 16px 8px;
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--cream);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--brass);
   text-decoration: none;
   line-height: 1.4;
   flex-grow: 1;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
 }
 
 .collection-card p {
