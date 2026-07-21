@@ -144,27 +144,24 @@ function renderCheckoutForm(){
   document.getElementById('checkout-form').addEventListener('submit', handleSubmit);
 }
 
-function validate(form){
+function validate(form) {
   let valid = true;
-  const required = ['fullname','phone','email','address','city'];
-  required.forEach(name => {
-    const field = form.querySelector(`[data-field="${name}"]`);
-    const input = form.querySelector(`[name="${name}"]`);
-    let ok = input.value.trim().length > 0;
-    if(name === 'email' && ok) ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value.trim());
-    if(name === 'phone' && ok) ok = input.value.replace(/\D/g,'').length >= 9;
-    field.classList.toggle('invalid', !ok);
-    if(!ok) valid = false;
+  const required = ['fullname', 'phone', 'email', 'address', 'city'];
+  
+  required.forEach(fieldName => {
+    const field = form.querySelector(`[name="${fieldName}"]`);
+    if (!field || !field.value.trim()) {
+      valid = false;
+      const fieldEl = form.querySelector(`[data-field="${fieldName}"]`);
+      if (fieldEl) fieldEl.classList.add('invalid');
+    } else {
+      const fieldEl = form.querySelector(`[data-field="${fieldName}"]`);
+      if (fieldEl) fieldEl.classList.remove('invalid');
+    }
   });
-
-  const payment = form.querySelector('[name="payment"]:checked').value;
-  if(payment === 'rib'){
-    const cardnum = form.querySelector('[name="cardnum"]').value.replace(/\s/g,'');
-    const cardexp = form.querySelector('[name="cardexp"]').value;
-    const cardcvc = form.querySelector('[name="cardcvc"]').value;
-    if(cardnum.length < 13 || cardexp.length < 4 || cardcvc.length < 3) valid = false;
-    // NOTE: Real card processing must never be validated/charged client-side.
-    // This is a placeholder UI — see README for CMI backend integration.
+  
+  if (!valid) {
+    alert('Veuillez remplir tous les champs requis');
   }
   return valid;
 }
@@ -183,7 +180,7 @@ function handleSubmit(e){
     return;
   }
 
-  const payment = form.querySelector('[name="payment"]:checked').value;
+  const payment = 'whatsapp'; 
   const customer = {
     fullname: form.querySelector('[name="fullname"]').value.trim(),
     email: form.querySelector('[name="email"]').value.trim(),
