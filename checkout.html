@@ -127,28 +127,21 @@ function renderCheckoutForm(){
 
         <h3><span class="num">3</span> Mode de paiement</h3>
           <p style="font-size:13px; color:var(--muted); margin:-8px 0 16px;">Choisissez votre méthode de paiement ci-dessous.</p>
-          <div class="pay-options">
-          <label class="pay-option selected" data-opt="whatsapp">
-            <input type="radio" name="payment" value="whatsapp" checked>
-            <div>
-            <div class="title">💬 WhatsApp</div>
-            <div class="desc">Confirmez votre commande via WhatsApp et payez facilement.</div>
-         </div>
-        </label>
-            <label class="pay-option" data-opt="cod">
-              <input type="radio" name="payment" value="cod">
-              <div style="width:100%;">
-                <div class="title">💵 Paiement à la livraison</div>
-                <div class="desc">Payez en espèces au livreur à la réception de votre colis.</div>
-              </div>
-            </label>
-          </div>
+<div class="pay-options">
+  <label class="pay-option selected" data-opt="whatsapp">
+    <input type="radio" name="payment" value="whatsapp" checked>
+    <div>
+      <div class="title">💬 WhatsApp</div>
+      <div class="desc">Confirmez votre commande via WhatsApp et payez facilement.</div>
+    </div>
+  </label>
+</div>
 
- <!-- WhatsApp Information -->
+<!-- WhatsApp Information -->
 <div id="whatsapp-info" style="background: #d4f8d4; padding: 20px; border-radius: 8px; margin-top: 20px; display: block;">
   <h4 style="color: #25D366; margin-top: 0; margin-bottom: 15px;">💬 Contacter sur WhatsApp</h4>
   <p style="margin: 0; font-size: 14px; color: #333;">
-    Remplissez le formulaire et cliquez sur "Confirmer la commande". Vous serez redirigé vers WhatsApp avec les détails de votre commande.
+    Après avoir cliqué sur "Confirmer la commande", vous serez redirigé vers WhatsApp pour finaliser votre paiement.
   </p>
 </div>
 
@@ -276,46 +269,39 @@ function handleSubmit(e){
     saveCart([]);
 
     // Save order to localStorage for BOTH payment methods
+// Save order to localStorage for all methods
 const ordersKey = 'hermabi_orders';
 const existingOrders = JSON.parse(localStorage.getItem(ordersKey) || '[]');
 const newOrder = {
   id: data.orderId,
   customer: customer,
   items: cart.map(item => {
-  const product = getProduct(item.id);
-  return {
-    id: item.id,
-    name: product.name,
-    size: item.size,
-    qty: item.qty,
-    price: product.price
-  };
-}),
+    const product = getProduct(item.id);
+    return {
+      id: item.id,
+      name: product.name,
+      size: item.size,
+      qty: item.qty,
+      price: product.price
+    };
+  }),
   total: total,
-  paymentMethod: payment,
+  paymentMethod: 'whatsapp',
   status: 'confirmed'
 };
 existingOrders.push(newOrder);
 localStorage.setItem(ordersKey, JSON.stringify(existingOrders));
 
-if (payment === 'cod') {
-  showConfirmation(data.orderId, total, 'cod');
-  return;
-}
+// WhatsApp redirect
+const cartDetails = cart.map(item => {
+  const p = getProduct(item.id);
+  return `• ${p.name} (Taille: ${item.size || 'M'}) x${item.qty} = ${fmtPrice(p.price * item.qty)}`;
+}).join('%0A');
 
-if (payment === 'whatsapp') {
-  // Build WhatsApp message
-  const cartDetails = cart.map(item => {
-    const p = getProduct(item.id);
-    return `• ${p.name} (Taille: ${item.size || 'M'}) x${item.qty} = ${fmtPrice(p.price * item.qty)}`;
-  }).join('%0A');
-  
-  const message = `Bonjour Hermabi%0A%0A📦 *Nouvelle Commande*%0ANuméro: ${data.orderId}%0A%0A*Produits:*%0A${cartDetails}%0A%0A*Sous-total:* ${fmtPrice(cartSubtotal())} DHS%0A*Livraison:* ${fmtPrice(shippingCost())} DHS%0A*TOTAL:* ${fmtPrice(total)} DHS%0A%0AClient: ${customer.fullname}%0ATéléphone: ${customer.phone}%0AAdresse: ${customer.address}, ${customer.city}%0A%0AJe voudrais confirmer et payer cette commande.`;
-  
-  window.open(`https://wa.me/212611301422?text=${message}`, '_blank');
-  showConfirmation(data.orderId, total, 'whatsapp');
-  return;
-}
+const message = `Bonjour Hermabi%0A%0A📦 *Nouvelle Commande*%0ANuméro: ${data.orderId}%0A%0A*Produits:*%0A${cartDetails}%0A%0A*Sous-total:* ${fmtPrice(cartSubtotal())} DHS%0A*Livraison:* ${fmtPrice(shippingCost())} DHS%0A*TOTAL:* ${fmtPrice(total)} DHS%0A%0AClient: ${customer.fullname}%0ATéléphone: ${customer.phone}%0AAdresse: ${customer.address}, ${customer.city}%0A%0AJe voudrais confirmer et payer cette commande.`;
+
+window.open(`https://wa.me/212611301422?text=${message}`, '_blank');
+showConfirmation(data.orderId, total, 'whatsapp');
   })
   .catch(error => {
     console.error('Checkout error:', error);
