@@ -78,7 +78,26 @@ function renderCheckoutForm(){
 
   root.innerHTML = `
     <h1 style="padding-top:50px; font-size:34px;">Finaliser la commande</h1>
+    <!-- Order Summary WITH IMAGES -->
+    <div style="background: var(--stucco-dim); padding: 24px; border-radius: 12px; border: 1px solid var(--line); margin-bottom: 30px;">
+      <div id="order-items-summary"></div>
+      <div style="border-top: 1px solid var(--line); padding-top: 20px; margin-top: 20px;">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 14px;">
+          <span style="color: var(--muted);">Sous-total</span>
+          <span id="summary-subtotal"></span>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 20px; font-size: 14px;">
+          <span style="color: var(--muted);">Livraison</span>
+          <span id="summary-shipping"></span>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 18px; font-weight: 700; color: var(--brass);">
+          <span>Total</span>
+          <span id="summary-total"></span>
+        </div>
+      </div>
+    </div>
     <div class="checkout-layout">
+
       <form id="checkout-form" novalidate>
         <div class="form-block">
           <h3><span class="num">1</span> Coordonnées</h3>
@@ -134,13 +153,38 @@ function renderCheckoutForm(){
   <button type="submit" class="btn brass block" style="padding: 16px; font-size: 16px;">Confirmer la commande</button>
 </div>
 
-<!-- Summary (outside form) -->
-<div class="summary-row" style="border-top:1px solid var(--line); padding-top:14px; margin-top:24px;"><span>Sous-total</span><span>${fmtPrice(sub)}</span></div>
-<div class="summary-row"><span>Livraison</span><span>${ship===0?'Offerte':fmtPrice(ship)}</span></div>
-<div class="summary-row total"><span>Total</span><span>${fmtPrice(total)}</span></div>
+
+
   `;
 
+// Render order summary
+function renderOrderSummary() {
+  const cart = getCart();
+  const sub = cartSubtotal();
+  const ship = shippingCost();
+  const tot = cartTotal();
+  
+  const itemsHtml = cart.map(item => {
+    const p = getProduct(item.id);
+    return `
+      <div style="display: flex; gap: 16px; padding: 16px 0; border-bottom: 1px solid var(--line);">
+        <img src="${p.img}" alt="${p.name}" style="width: 100px; height: 100px; object-fit: cover; border-radius: 8px;">
+        <div style="flex: 1;">
+          <div style="color: var(--cream); font-weight: 600; margin-bottom: 8px;">${p.name}</div>
+          <div style="color: var(--muted); font-size: 12px; margin-bottom: 8px;">Taille: ${item.size} | Quantité: ${item.qty}</div>
+          <div style="color: var(--brass); font-weight: 600; font-size: 14px;">${fmtPrice(p.price * item.qty)}</div>
+        </div>
+      </div>
+    `;
+  }).join('');
+  
+  document.getElementById('order-items-summary').innerHTML = itemsHtml;
+  document.getElementById('summary-subtotal').textContent = fmtPrice(sub);
+  document.getElementById('summary-shipping').textContent = ship === 0 ? 'Gratuite' : fmtPrice(ship);
+  document.getElementById('summary-total').textContent = fmtPrice(tot);
+}
 
+renderOrderSummary();
   document.getElementById('checkout-form').addEventListener('submit', handleSubmit);
 }
 
