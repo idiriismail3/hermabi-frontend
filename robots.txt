@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /admin.html
+
+Sitemap: https://hermabi-frontend11.onrender.com/sitemap.xml
