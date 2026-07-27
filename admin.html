@@ -120,9 +120,11 @@ body { font-family: 'Work Sans', sans-serif; background: var(--stucco); color: v
       <textarea id="prod-desc"></textarea>
     </div>
     <div class="form-group">
-        <label>URL Image (ou nom de fichier)</label>
-        <input type="text" id="prod-img-url" placeholder="images/shirt-01.jpg ou https://...">
-      </div>
+      <label>Télécharger Image</label>
+      <input type="file" id="prod-images" accept="image/*">
+      <div id="image-preview" style="margin-top: 10px; width: 100px; height: 100px;"></div>
+      <div id="upload-status" style="margin-top: 10px; color: var(--brass); font-size: 12px;"></div>
+    </div>
     <div class="modal-actions">
       <button class="btn-save" onclick="saveProduct()">Enregistrer</button>
       <button class="btn-cancel" onclick="closeProductModal()">Annuler</button>
@@ -134,8 +136,7 @@ body { font-family: 'Work Sans', sans-serif; background: var(--stucco); color: v
 <script>
 const ADMIN_PASSWORD = 'hermabi2024';
 let editingProductId = null;
-let uploadedImageUrl = '';
-let productImages = [];
+let uploadedImageBase64 = '';
 
 function login() {
   const password = document.getElementById('login-password').value;
@@ -195,10 +196,9 @@ function saveProduct() {
   const price = parseInt(document.getElementById('prod-price').value);
   const stock = parseInt(document.getElementById('prod-stock').value);
   const desc = document.getElementById('prod-desc').value;
-  const imgUrl = document.getElementById('prod-img-url').value;
   
-  if (!name || !price || !stock || !imgUrl) {
-    alert('Remplissez tous les champs');
+  if (!name || !price || !stock || !uploadedImageBase64) {
+    alert('Remplissez tous les champs et téléchargez une image');
     return;
   }
   
@@ -211,7 +211,7 @@ function saveProduct() {
     product.price = price;
     product.stock = stock;
     product.desc = desc;
-    product.img = imgUrl;
+    product.img = uploadedImageBase64;
   } else {
     const newId = Math.max(...products.map(p => p.id), 0) + 1;
     products.push({
@@ -221,12 +221,15 @@ function saveProduct() {
       price: price,
       stock: stock,
       desc: desc,
-      img: imgUrl
+      img: uploadedImageBase64
     });
   }
   
   saveProducts(products);
   loadProducts();
+  uploadedImageBase64 = '';
+  document.getElementById('image-preview').innerHTML = '';
+  document.getElementById('upload-status').textContent = '';
   closeProductModal();
   alert('Produit enregistré');
 }
@@ -304,42 +307,29 @@ function loadOrders() {
   html += '</tbody></table>';
   container.innerHTML = html;
 }
-
+// Image upload handler
+document.getElementById('prod-images').addEventListener('change', function(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  
+  const reader = new FileReader();
+  reader.onload = function(event) {
+    uploadedImageBase64 = event.target.result;
+    
+    // Show preview
+    const preview = document.getElementById('image-preview');
+    preview.innerHTML = `<img src="${uploadedImageBase64}" style="width: 100px; height: 100px; object-fit: cover; border-radius: 8px;">`;
+    
+    document.getElementById('upload-status').textContent = '✓ Image sélectionnée';
+  };
+  reader.readAsDataURL(file);
+});
 if (sessionStorage.getItem('admin_logged_in') === 'true') {
   showDashboard();
 } else {
   showLogin();
 }
-function uploadImage() {
-  const file = document.getElementById('prod-images').files[0];
-  if (!file) {
-    alert('Sélectionnez une image');
-    return;
-  }
-  
-  const formData = new FormData();
-  formData.append('image', file);
-  
-  document.getElementById('upload-status').textContent = 'Téléchargement...';
-  
-  fetch('https://hermabi-backend1.onrender.com/api/upload', {
-    method: 'POST',
-    body: formData
-  })
-  .then(res => res.json())
-  .then(data => {
-    if (data.success) {
-      uploadedImageUrl = data.imageUrl;
-      document.getElementById('upload-status').textContent = '✓ Image téléchargée';
-    } else {
-      alert('Erreur: ' + data.error);
-    }
-  })
-  .catch(err => {
-    alert('Erreur upload: ' + err);
-    document.getElementById('upload-status').textContent = '';
-  });
-}
+
 </script>
 </body>
 </html>
