@@ -4,6 +4,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Boutique — Hermabi</title>
+<meta charset="UTF-8">
+<meta name="description" content="Shop Hermabi Collection - Maillots, Pantalons, Accessories. Modern Moroccan streetwear with Catalan design aesthetic.">
+<meta name="keywords" content="buy streetwear, moroccan shirts, designer pants, hermabi shop, fashion collection">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Open Graph -->
+<meta property="og:title" content="Shop - Hermabi Collection">
+<meta property="og:description" content="Browse our exclusive streetwear collection">
+<meta property="og:url" content="https://hermabi-frontend11.onrender.com/shop.html">
+<meta property="og:type" content="website">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
@@ -97,7 +108,7 @@
       <a href="product.html?id=${p.id}" class="card">
         <div class="card-media">
           <span class="card-tag">${p.cat}</span>
-          <img src="${p.img}" alt="${p.name}">
+          <img src="${p.img}" alt="Hermabi ${p.cat} - ${p.name} - Premium Moroccan Streetwear ${fmtPrice(p.price)}">
         </div>
         <div class="card-title">${p.name}</div>
         <div class="card-cat">${p.cat}</div>

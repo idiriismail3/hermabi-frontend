@@ -1,5 +1,10 @@
 User-agent: *
 Allow: /
 Disallow: /admin.html
+Disallow: /checkout.html
+
+Crawl-delay: 1
+User-agent: Googlebot
+Crawl-delay: 0
 
 Sitemap: https://hermabi-frontend11.onrender.com/sitemap.xml
