@@ -14,9 +14,25 @@ const PRODUCTS = [
 const PRODUCTS_KEY = 'hermabi_products';
 
 function getProducts() {
-  const stored = localStorage.getItem(PRODUCTS_KEY);
-  return stored ? JSON.parse(stored) : PRODUCTS;
+  const productsJson = localStorage.getItem(PRODUCTS_KEY);
+  return productsJson ? JSON.parse(productsJson) : PRODUCTS;
 }
+
+// Sync products with backend
+async function syncProductsWithBackend() {
+  try {
+    const response = await fetch('http://localhost:3000/api/products');
+    const data = await response.json();
+    if (data.success && data.products.length > 0) {
+      localStorage.setItem(PRODUCTS_KEY, JSON.stringify(data.products));
+    }
+  } catch (e) {
+    console.log('Backend not available, using local products');
+  }
+}
+
+// Load products from backend on page load
+window.addEventListener('load', syncProductsWithBackend);
 
 function saveProducts(products) {
   localStorage.setItem(PRODUCTS_KEY, JSON.stringify(products));

@@ -228,14 +228,16 @@ function saveProduct() {
     });
   }
   
-  saveProducts(products);
-  loadProducts();
-  uploadedImageBase64 = '';
-  document.getElementById('image-preview').innerHTML = '';
-  document.getElementById('upload-status').textContent = '';
-  closeProductModal();
-  alert('Produit enregistré');
-}
+  function saveProducts(products) {
+  localStorage.setItem(PRODUCTS_KEY, JSON.stringify(products));
+  
+  // Also save to backend
+  fetch('http://localhost:3000/api/products', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ products })
+  }).catch(err => console.log('Backend sync failed:', err));
+  }}
 
 function loadProducts() {
   const products = getProducts();
