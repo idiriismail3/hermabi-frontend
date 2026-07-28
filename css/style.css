@@ -285,11 +285,20 @@ h1,h2,h3,h4{
   position:absolute; inset:0; z-index:1; opacity:.16;
   pointer-events:none;
 }
-.hero h1{
-  font-size: clamp(42px, 6vw, 76px);
-  max-width: 820px;
-  line-height: 1.05;
-  color: var(--cream);
+.hero-title {
+  font-size: clamp(32px, 8vw, 72px);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--brass);
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 36px;
+    letter-spacing: 0.05em;
+  }
 }
 .hero p{
   max-width: 480px;
