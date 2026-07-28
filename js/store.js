@@ -21,7 +21,7 @@ function getProducts() {
 // Sync products with backend
 async function syncProductsWithBackend() {
   try {
-    const response = await fetch('http://localhost:3000/api/products');
+    const response = await fetch('https://hermabi-backend-1.onrender.com/');
     const data = await response.json();
     if (data.success && data.products.length > 0) {
       localStorage.setItem(PRODUCTS_KEY, JSON.stringify(data.products));

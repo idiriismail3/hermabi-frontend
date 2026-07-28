@@ -245,7 +245,7 @@ function handleSubmit(e){
   submitBtn.disabled = true;
   submitBtn.textContent = 'Traitement en cours...';
 
-  fetch('https://idiriismail3.github.io/hermabi-backend/', {
+  fetch('https://hermabi-backend-1.onrender.com/api/checkout', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
