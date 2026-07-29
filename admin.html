@@ -145,7 +145,18 @@ function addProduct() {
   products.push({ id: newId, name, cat, price, stock, img: selectedImage });
   saveProducts(products);
   
-  document.getElementById('add-msg').innerHTML = '<span class="success">✓ Product added!</span>';
+  // SYNC TO MONGODB
+  fetch('https://hermabi-backend-1.onrender.com/api/products', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ products })
+  }).then(() => {
+    console.log('✓ Synced to MongoDB');
+  }).catch(err => {
+    console.error('Sync failed:', err);
+  });
+  
+  document.getElementById('add-msg').innerHTML = '<span class="success">✓ Product added & synced!</span>';
   document.getElementById('prod-name').value = '';
   document.getElementById('prod-price').value = '';
   document.getElementById('prod-stock').value = '';
