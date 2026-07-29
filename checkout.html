@@ -276,7 +276,7 @@ function handleSubmit(e){
       return;
     }
 
-    saveCart([]);
+    localStorage.setItem(CART_KEY, JSON.stringify([]));
 
     // Save order to localStorage for BOTH payment methods
 // Save order to localStorage for all methods
