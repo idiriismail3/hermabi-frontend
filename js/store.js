@@ -2,21 +2,11 @@ const PRODUCTS_KEY = 'hermabi_products';
 const CART_KEY = 'maisonAtlasCart';
 const SHIPPING_FLAT = 25;
 const FREE_SHIPPING_THRESHOLD = 800;
-
-const PRODUCTS = [
-  { id:1, name:"Black Catalan Shirt Classic", cat:"Maillots", price:199, stock:50, img:"images/shirt-01.jpg" },
-  { id:2, name:"Burgundy Catalan Shirt Premium", cat:"Maillots", price:199, stock:50, img:"images/shirt-02.jpg" },
-  { id:3, name:"Beige Catalan Shirt Elegant", cat:"Maillots", price:199, stock:50, img:"images/shirt-03.jpg" },
-  { id:4, name:"Navy Blue Catalan Shirt Statement", cat:"Maillots", price:199, stock:50, img:"images/shirt-04.jpg" },
-  { id:5, name:"Charcoal Catalan Shirt Limited", cat:"Maillots", price:199, stock:50, img:"images/shirt-05.jpg" },
-  { id:6, name:"Black Fluid Pants", cat:"Pantalons", price:199, stock:50, img:"images/hermabi-11.jpg" },
-  { id:7, name:"Black Cargo Pants", cat:"Pantalons", price:199, stock:50, img:"images/hermabi-12.jpg" },
-  { id:8, name:"Designer Sunglasses", cat:"Accessories", price:100, stock:50, img:"images/sunglasses.png" },
-];
+const BACKEND_URL = 'https://hermabi-backend-1.onrender.com';
 
 function getProducts() {
   const productsJson = localStorage.getItem(PRODUCTS_KEY);
-  return productsJson ? JSON.parse(productsJson) : PRODUCTS;
+  return productsJson ? JSON.parse(productsJson) : [];
 }
 
 function getProduct(id) {
@@ -25,7 +15,28 @@ function getProduct(id) {
 
 function saveProducts(products) {
   localStorage.setItem(PRODUCTS_KEY, JSON.stringify(products));
+  // Save to backend
+  fetch(`${BACKEND_URL}/api/products`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ products })
+  }).catch(e => console.log('Backend sync failed'));
 }
+
+// Sync products from backend on load
+async function syncProductsFromBackend() {
+  try {
+    const res = await fetch(`${BACKEND_URL}/api/products`);
+    const data = await res.json();
+    if (data.success && data.products.length > 0) {
+      localStorage.setItem(PRODUCTS_KEY, JSON.stringify(data.products));
+    }
+  } catch (e) {
+    console.log('Backend not available');
+  }
+}
+
+window.addEventListener('load', syncProductsFromBackend);
 
 function getCart() {
   const cartJson = localStorage.getItem(CART_KEY);
