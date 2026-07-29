@@ -276,50 +276,48 @@ function handleSubmit(e){
       return;
     }
 
+    // Create message for WhatsApp
+    const items = cart.map(item => {
+      const p = getProduct(item.id);
+      return `${p.name} x${item.qty}`;
+    }).join('\n');
+    
+    const message = `Commande #${data.orderId}\n\n${items}\n\nTotal: ${fmtPrice(total)} DHS`;
+    
+    // REDIRECT TO WHATSAPP FIRST
+    const whatsappUrl = `https://wa.me/212611301422?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+    
+    // THEN clear cart and save order
     localStorage.setItem(CART_KEY, JSON.stringify([]));
-
-    // Save order to localStorage for BOTH payment methods
-// Save order to localStorage for all methods
-const ordersKey = 'hermabi_orders';
-const existingOrders = JSON.parse(localStorage.getItem(ordersKey) || '[]');
-const newOrder = {
-  id: data.orderId,
-  customer: customer,
-  items: cart.map(item => {
-    const product = getProduct(item.id);
-    return {
-      id: item.id,
-      name: product.name,
-      size: item.size,
-      qty: item.qty,
-      price: product.price
+    
+    const ordersKey = 'hermabi_orders';
+    const existingOrders = JSON.parse(localStorage.getItem(ordersKey) || '[]');
+    const newOrder = {
+      id: data.orderId,
+      customer: customer,
+      items: cart.map(item => {
+        const product = getProduct(item.id);
+        return {
+          id: item.id,
+          name: product.name,
+          size: item.size,
+          qty: item.qty,
+          price: product.price
+        };
+      }),
+      total: total,
+      paymentMethod: 'whatsapp',
+      status: 'confirmed'
     };
-  }),
-  total: total,
-  paymentMethod: 'whatsapp',
-  status: 'confirmed'
-};
-existingOrders.push(newOrder);
-localStorage.setItem(ordersKey, JSON.stringify(existingOrders));
-
-// WhatsApp redirect
-const cartDetails = cart.map(item => {
-  const p = getProduct(item.id);
-  return `• ${p.name} (Taille: ${item.size || 'M'}) x${item.qty} = ${fmtPrice(p.price * item.qty)}`;
-}).join('%0A');
-
-const message = `Bonjour Hermabi%0A%0A📦 *Nouvelle Commande*%0ANuméro: ${data.orderId}%0A%0A*Produits:*%0A${cartDetails}%0A%0A*Sous-total:* ${fmtPrice(cartSubtotal())} DHS%0A*Livraison:* ${fmtPrice(shippingCost())} DHS%0A*TOTAL:* ${fmtPrice(total)} DHS%0A%0AClient: ${customer.fullname}%0ATéléphone: ${customer.phone}%0AAdresse: ${customer.address}, ${customer.city}%0A%0AJe voudrais confirmer et payer cette commande.`;
-
-window.open(`https://wa.me/212611301422?text=${message}`, '_blank');
-showConfirmation(data.orderId, total, 'whatsapp');
-  })
-  .catch(error => {
-    console.error('Checkout error:', error);
-    showToast('Erreur serveur. Vérifiez que le backend est lancé (npm start).');
-    submitBtn.disabled = false;
-    submitBtn.textContent = originalText;
-  });
-}
+    existingOrders.push(newOrder);
+    localStorage.setItem(ordersKey, JSON.stringify(existingOrders));
+    
+    // Redirect to success page
+    setTimeout(() => {
+      window.location.href = 'checkout.html?success=true';
+    }, 1000);
+  })}
 
 function showCardRedirectScreen(orderRef, total){
   root.innerHTML = `

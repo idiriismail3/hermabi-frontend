@@ -1,79 +1,364 @@
-# Hermabi — Modern Moroccan Fashion (site vitrine)
+## 📋 Table of Contents
+- [Project Structure](#project-structure)
+- [Frontend Setup](#frontend-setup)
+- [Backend Setup](#backend-setup)
+- [Configuration](#configuration)
+- [Running the Application](#running-the-application)
+- [Admin Dashboard](#admin-dashboard)
+- [Deployment](#deployment)
 
-Un site e-commerce complet et fonctionnel côté client : accueil, boutique avec filtres,
-fiche produit, panier et tunnel de commande avec choix **carte bancaire** ou
-**paiement à la livraison**. Le design reprend directement le logo Hermabi — noir profond,
-doré, vert bouteille et rouge oxblood — avec vos 12 vraies photos produits, toutes à 300 MAD.
+---
 
-## Ce qui fonctionne déjà (dans votre navigateur, une fois hébergé)
-- Navigation entre pages, filtres par catégorie (Femme / Homme / Accessoires)
-- Panier persistant (localStorage), quantités, calcul du sous-total / livraison / total
-- Formulaire de commande avec validation
-- Choix du mode de paiement : à la livraison (fonctionnel tel quel) ou carte (interface prête,
-  voir ci-dessous pour l'activer réellement)
-- Vos 12 produits déjà en place, avec vos vraies photos, à 300 MAD chacun
+## 🎯 Project Structure
+hermabi-site/
+├── index.html (Homepage)
+├── shop.html (Products listing)
+├── product.html (Product detail page)
+├── cart.html (Shopping cart)
+├── checkout.html (Checkout & payment)
+├── admin.html (Admin dashboard)
+├── css/
+│ └── style.css (All styling)
+├── js/
+│ └── store.js (Product & cart logic)
+├── images/ (Product images)
+└── README.md (This file)
 
-## À vérifier / personnaliser
-1. **Noms et catégories des produits** : dans `js/store.js`, le tableau `PRODUCTS`. Les noms et
-   catégories (Femme/Homme/Accessoires) ont été attribués à partir des photos — relisez-les et
-   corrigez ceux qui ne correspondent pas exactement à vos articles. L'`id` et le chemin `img`
-   ne doivent pas changer.
-2. **Prix** : tous fixés à 300 MAD comme demandé. Modifiez `price` par produit si certains
-   articles doivent avoir un prix différent plus tard.
-3. **Photos** : vos 12 photos sont dans `images/` (hermabi-01.jpg à hermabi-13.jpg) et le logo
-   dans `images/logo.jpg`. Pour ajouter de nouveaux produits, déposez la photo dans ce dossier
-   et ajoutez une ligne dans `PRODUCTS`.
-4. **Frais de livraison / seuil offert** : constantes `SHIPPING_FLAT` et `FREE_SHIPPING_THRESHOLD`
-   en haut de `js/store.js`.
-5. **Couleurs / polices** : variables `:root` en haut de `css/style.css`, calées sur le logo
-   (`--brass` = doré, `--bottle` = vert médaillon, `--error` = rouge oxblood).
+Backend Folder: /backend/
+├── hermabi-backend.js (Express server)
+├── package.json (Dependencies)
+├── orders.json (Saved orders)
+└── .env (Environment variables)
 
-## Paiement à la livraison
-Déjà fonctionnel côté interface. Pour un vrai site, la seule chose à ajouter est un moyen de
-recevoir la commande quelque part (voir "Backend requis" ci-dessous) — sinon les commandes
-ne sont visibles que dans le navigateur du client.
 
-## Paiement par carte bancaire — ce qu'il reste à faire
-**Important : aucun site ne peut traiter de vrais paiements par carte uniquement avec du code
-côté navigateur (HTML/JS).** Ce n'est pas une limite de ce projet en particulier — c'est une
-règle de sécurité bancaire universelle (PCI-DSS). Il faut :
+---
 
-1. **Un compte marchand CMI** (Centre Monétique Interbancaire) — à demander auprès de votre
-   banque marocaine (Attijariwafa, BMCE/Bank Of Africa, BCP, etc.). La banque vous fournira :
-   - un identifiant marchand (`clientid`)
-   - une clé secrète de hachage (`storekey`)
-   - l'accès à la plateforme de test (sandbox) CMI avant la mise en production
-2. **Un petit serveur backend** (Node.js, PHP, Python — au choix) qui :
-   - reçoit le panier + infos client depuis ce site
-   - calcule le montant et génère la signature de sécurité (hash) exigée par CMI
-   - redirige le client vers la page de paiement hébergée par CMI (c'est CMI qui affiche le
-     vrai formulaire de carte bancaire, jamais votre site — c'est plus sûr pour vous et vos clients)
-   - reçoit la notification de paiement (callback) de CMI et met à jour la commande
-3. **Un hébergement** pour ce backend (ex. un petit VPS, ou un service comme Render/Railway/OVH).
+## 💻 Frontend Setup
 
-En résumé : ce site est prêt à envoyer les données au backend ; il ne lui manque que ce
-backend et vos identifiants CMI réels. Une agence ou un développeur freelance peut brancher
-cette partie en général en 1 à 3 jours une fois le compte CMI obtenu — c'est une étape standard.
+### Requirements
+- Any modern web browser (Chrome, Firefox, Safari, Edge)
+- Text editor (VS Code recommended)
+- Git (optional, for version control)
 
-Alternative plus rapide à mettre en place si vous ne voulez pas gérer de backend vous-même :
-des plateformes comme **PayZone**, **HPS/PayFast**, ou une solution e-commerce clé en main
-(Shopify avec CMI, WooCommerce + plugin CMI) gèrent cette partie pour vous.
+### Installation
 
-## Comment publier ce site en ligne
-- Le plus simple : un hébergement mutualisé marocain ou international (ex. o2switch, Hostinger,
-  Netlify pour un site statique) — il suffit d'uploader tous ces fichiers tels quels.
-- Pensez à un **nom de domaine** (ex. hermabi.ma ou hermabi.com) et à activer le **HTTPS**
-  (obligatoire pour rassurer vos clients et pour toute intégration de paiement).
+1. **Extract the hermabi-site folder** to your desired location
 
-## Structure des fichiers
+2. **No NPM installation needed!** The frontend is pure HTML/CSS/JavaScript
+
+3. **Open in browser:**
+   - Double-click `index.html` OR
+   - Use a local server (recommended):
+```bash
+   # Using Python 3
+   python -m http.server 8000
+   
+   # Or using Node.js (if installed)
+   npx http-server
 ```
-site/
-├── index.html      → page d'accueil
-├── shop.html       → boutique avec filtres
-├── product.html    → fiche produit (?id=1, ?id=2, …)
-├── cart.html        → panier
-├── checkout.html    → tunnel de commande
-├── css/style.css    → tous les styles
-├── js/store.js      → catalogue produits + logique panier
-└── images/          → vos 12 photos produits + logo
+
+---
+
+## 🔧 Backend Setup
+
+### Requirements
+- **Node.js v16+** (https://nodejs.org)
+- **npm** (comes with Node.js)
+
+### Installation
+
+1. **Navigate to backend folder:**
+```bash
+   cd /path/to/backend
 ```
+
+2. **Install dependencies:**
+```bash
+   npm install
+```
+
+   This installs:
+   - `express` - Web framework
+   - `cors` - Cross-origin requests
+
+3. **Create `.env` file** in backend folder:
+```bash
+   touch .env
+```
+
+4. **Add environment variables to `.env`:**
+
+PORT=3000
+NODE_ENV=production
+FRONTEND_URL=http://localhost:8000
+BACKEND_URL=http://localhost:3000
+
+
+5. **Start the backend:**
+```bash
+   npm start
+```
+   
+   You should see:
+
+✓ Hermabi backend running on port 3000
+✓ Frontend: http://localhost:8000
+
+
+---
+
+## ⚙️ Configuration
+
+### Change Backend URL (if needed)
+
+**File:** `checkout.html`
+
+**Find this line (around line 245):**
+```javascript
+fetch('https://hermabi-backend1.onrender.com/api/checkout', {
+```
+
+**Change to your backend URL:**
+```javascript
+fetch('http://localhost:3000/api/checkout', {
+```
+
+### Change WhatsApp Number
+
+**File:** `checkout.html`
+
+**Find this line (around line 280):**
+```javascript
+window.open(`https://wa.me/212611301422?text=${message}`, '_blank');
+```
+
+**Change phone number:**
+```javascript
+window.open(`https://wa.me/YOUR_PHONE_NUMBER?text=${message}`, '_blank');
+```
+
+Example: `https://wa.me/212611301422?text=` (Morocco format: +212611301422)
+
+### Admin Password
+
+**File:** `admin.html`
+
+**Find this line (around line 140):**
+```javascript
+const ADMIN_PASSWORD = 'hermabi2024';
+```
+
+**Change password:**
+```javascript
+const ADMIN_PASSWORD = 'your-new-password';
+```
+
+---
+
+## 🚀 Running the Application
+
+### Local Development
+
+**Terminal 1 - Start Backend:**
+```bash
+cd backend
+npm start
+```
+
+**Terminal 2 - Start Frontend:**
+```bash
+cd hermabi-site
+python -m http.server 8000
+```
+
+**Open in browser:**
+
+http://localhost:8000
+
+
+### Access Points
+
+- **Homepage:** `http://localhost:8000/index.html`
+- **Shop:** `http://localhost:8000/shop.html`
+- **Admin Dashboard:** `http://localhost:8000/admin.html`
+- **Backend Health Check:** `http://localhost:3000/health`
+
+---
+
+## 🎛️ Admin Dashboard
+
+### Login
+1. Go to: `http://localhost:8000/admin.html`
+2. Enter password: `hermabi2024` (or your custom password)
+3. Click **Connexion**
+
+### Features
+
+**Products Tab:**
+- ➕ Add new products with images
+- ✏️ Edit product prices and stock
+- 🗑️ Delete products
+- 📸 Upload images directly from computer
+
+**Orders Tab:**
+- 📋 View all customer orders
+- 👤 See customer details
+- 📦 View ordered products with sizes/quantities
+- 💰 Check order totals and payment methods
+
+### Add Product Example
+
+1. Click **"+ Ajouter un Produit"**
+2. Fill in:
+   - **Product Name:** Black Catalan Shirt
+   - **Category:** Maillots
+   - **Price:** 199
+   - **Stock:** 50
+   - **Description:** Premium streetwear
+   - **Image:** Upload from your computer
+3. Click **"Enregistrer"**
+
+---
+
+## 📱 Payment Methods
+
+Currently only **WhatsApp Payment** is available:
+
+1. Customer adds products to cart
+2. Goes to checkout
+3. Fills in contact & delivery info
+4. Clicks "Confirmer la commande"
+5. **Redirected to WhatsApp** with order details
+6. Customer messages payment confirmation
+
+### To Add Payment Methods
+
+Edit `checkout.html` to add:
+- Stripe
+- PayPal
+- Bank transfer
+- Other payment gateways
+
+---
+
+## 🌐 Deployment
+
+### Deploy Frontend (GitHub Pages)
+
+1. Push code to GitHub repository
+2. Enable GitHub Pages in Settings
+3. Frontend accessible at: `https://username.github.io/hermabi-site`
+
+### Deploy Backend (Render)
+
+1. Create account at: https://render.com
+2. Connect GitHub repository
+3. Create new Web Service
+4. Set environment variables
+5. Backend URL: `https://your-service.onrender.com`
+
+### Update Checkout URL
+
+After deploying, update `checkout.html`:
+
+**Change from:**
+```javascript
+fetch('http://localhost:3000/api/checkout', {
+```
+
+**To:**
+```javascript
+fetch('https://your-service.onrender.com/api/checkout', {
+```
+
+---
+
+## 📊 Data Storage
+
+- **Products:** Stored in browser `localStorage`
+- **Cart:** Stored in browser `localStorage`
+- **Orders:** Saved in backend `orders.json`
+- **Admin Data:** Protected by password
+
+### Clear All Data
+```bash
+# In browser console (F12 → Console):
+localStorage.clear()
+```
+
+---
+
+## 🐛 Troubleshooting
+
+### Images Not Showing
+- Check image paths in `/images` folder
+- Verify file names match in code
+- Hard refresh browser: `Cmd+Shift+R` (Mac) or `Ctrl+Shift+R` (Windows)
+
+### Backend Connection Error
+- Ensure backend is running: `npm start`
+- Check `FRONTEND_URL` in `.env` matches your frontend URL
+- Verify CORS is enabled in `hermabi-backend.js`
+
+### Admin Dashboard Not Loading
+- Clear browser cache
+- Try incognito/private mode
+- Check browser console for errors (F12)
+
+### Orders Not Saving
+- Check backend is running
+- Verify network tab in DevTools shows requests
+- Check `orders.json` file permissions
+
+---
+
+## 📝 File Reference
+
+### Key Files to Modify
+
+| File | Purpose | Changes |
+|------|---------|---------|
+| `checkout.html` | Payment integration | Backend URL, WhatsApp number |
+| `admin.html` | Admin access | Password |
+| `.env` (backend) | Environment setup | Port, URLs |
+| `js/store.js` | Product data | Add/edit products |
+
+---
+
+## 🔐 Security Notes
+
+1. **Admin Password:** Change from default `hermabi2024`
+2. **Environment Variables:** Keep `.env` file private (don't commit to Git)
+3. **WhatsApp Number:** Use proper format with country code
+4. **Backend URL:** Never expose sensitive endpoints publicly
+
+---
+
+## 📞 Support
+
+For issues:
+1. Check browser console (F12)
+2. Check backend logs in terminal
+3. Verify all URLs are correct
+4. Clear browser cache
+5. Restart backend server
+
+---
+
+## ✅ Quick Start Checklist
+
+- [ ] Install Node.js
+- [ ] Run `npm install` in backend folder
+- [ ] Create `.env` file with correct URLs
+- [ ] Update backend URL in `checkout.html`
+- [ ] Update WhatsApp number
+- [ ] Change admin password
+- [ ] Start backend: `npm start`
+- [ ] Start frontend server
+- [ ] Test checkout flow
+- [ ] Test admin dashboard
+- [ ] Add products via admin
+- [ ] Deploy to production
+
+---
+
