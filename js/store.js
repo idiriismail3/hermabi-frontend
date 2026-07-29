@@ -18,22 +18,6 @@ function getProducts() {
   return productsJson ? JSON.parse(productsJson) : PRODUCTS;
 }
 
-// Sync products with backend
-async function syncProductsWithBackend() {
-  try {
-    const response = await fetch('https://hermabi-backend-1.onrender.com');
-    const data = await response.json();
-    if (data.success && data.products.length > 0) {
-      localStorage.setItem(PRODUCTS_KEY, JSON.stringify(data.products));
-    }
-  } catch (e) {
-    console.log('Backend not available, using local products');
-  }
-}
-
-// Load products from backend on page load
-window.addEventListener('load', syncProductsWithBackend);
-
 function saveProducts(products) {
   localStorage.setItem(PRODUCTS_KEY, JSON.stringify(products));
 }
