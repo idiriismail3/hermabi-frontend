@@ -16,12 +16,14 @@
 .form-group label { display: block; color: var(--muted); font-size: 12px; margin-bottom: 5px; }
 .form-group input, .form-group select { width: 100%; padding: 10px; background: var(--stucco); border: 1px solid var(--line); border-radius: 6px; color: var(--text); }
 .btn { padding: 12px 24px; background: var(--brass); color: var(--ink); border: none; border-radius: 6px; cursor: pointer; font-weight: 600; margin-right: 10px; }
-.products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; margin-top: 40px; }
+.products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; margin-top: 40px; }
 .product-card { background: var(--stucco-dim); padding: 20px; border-radius: 8px; border: 1px solid var(--line); }
+.product-img { width: 100%; height: 180px; object-fit: cover; border-radius: 6px; margin-bottom: 15px; }
 .product-card input { width: 100%; padding: 8px; margin-bottom: 10px; background: var(--stucco); border: 1px solid var(--line); border-radius: 4px; color: var(--text); font-size: 12px; }
-.product-card button { width: 100%; padding: 8px; background: var(--brass); color: var(--ink); border: none; border-radius: 4px; cursor: pointer; font-size: 12px; }
+.product-card button { width: 100%; padding: 8px; background: var(--brass); color: var(--ink); border: none; border-radius: 4px; cursor: pointer; font-size: 12px; margin-bottom: 5px; }
 .error { color: #ff6b6b; }
 .success { color: #51cf66; }
+.image-preview { width: 100%; height: 150px; border: 2px solid var(--line); border-radius: 6px; margin-bottom: 15px; object-fit: cover; }
 </style>
 </head>
 <body style="background: var(--stucco); color: var(--text); font-family: 'Poppins', sans-serif;">
@@ -45,12 +47,12 @@
 <h2 style="color: var(--brass); margin-bottom: 20px;">Add New Product</h2>
 
 <div class="form-group">
-<label>Product Name</label>
+<label>Product Name *</label>
 <input type="text" id="prod-name" placeholder="Black Catalan Shirt">
 </div>
 
 <div class="form-group">
-<label>Category</label>
+<label>Category *</label>
 <select id="prod-cat">
 <option value="Maillots">Maillots</option>
 <option value="Pantalons">Pantalons</option>
@@ -59,18 +61,19 @@
 </div>
 
 <div class="form-group">
-<label>Price (DHS)</label>
+<label>Price (DHS) *</label>
 <input type="number" id="prod-price" placeholder="199">
 </div>
 
 <div class="form-group">
-<label>Stock</label>
+<label>Stock *</label>
 <input type="number" id="prod-stock" placeholder="50">
 </div>
 
 <div class="form-group">
-<label>Image URL</label>
-<input type="text" id="prod-img" placeholder="images/shirt-01.jpg">
+<label>Upload Image *</label>
+<input type="file" id="prod-image" accept="image/*">
+<img id="image-preview" class="image-preview" style="display: none;">
 </div>
 
 <button class="btn" onclick="addProduct()">Add Product</button>
@@ -91,6 +94,21 @@
 <script src="js/store.js"></script>
 <script>
 const PASSWORD = 'hermabi2024';
+let selectedImage = '';
+
+// Image upload handler
+document.getElementById('prod-image').addEventListener('change', function(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  
+  const reader = new FileReader();
+  reader.onload = function(event) {
+    selectedImage = event.target.result; // Base64 image
+    document.getElementById('image-preview').src = selectedImage;
+    document.getElementById('image-preview').style.display = 'block';
+  };
+  reader.readAsDataURL(file);
+});
 
 function login() {
   const pass = document.getElementById('password').value;
@@ -115,24 +133,25 @@ function addProduct() {
   const cat = document.getElementById('prod-cat').value;
   const price = parseInt(document.getElementById('prod-price').value);
   const stock = parseInt(document.getElementById('prod-stock').value);
-  const img = document.getElementById('prod-img').value;
   
-  if (!name || !price || !stock || !img) {
-    document.getElementById('add-msg').innerHTML = '<span class="error">Fill all fields!</span>';
+  if (!name || !price || !stock || !selectedImage) {
+    document.getElementById('add-msg').innerHTML = '<span class="error">Fill all fields & upload image!</span>';
     return;
   }
   
   const products = getProducts();
   const newId = products.length > 0 ? Math.max(...products.map(p => p.id)) + 1 : 1;
   
-  products.push({ id: newId, name, cat, price, stock, img });
+  products.push({ id: newId, name, cat, price, stock, img: selectedImage });
   saveProducts(products);
   
   document.getElementById('add-msg').innerHTML = '<span class="success">✓ Product added!</span>';
   document.getElementById('prod-name').value = '';
   document.getElementById('prod-price').value = '';
   document.getElementById('prod-stock').value = '';
-  document.getElementById('prod-img').value = '';
+  document.getElementById('prod-image').value = '';
+  document.getElementById('image-preview').style.display = 'none';
+  selectedImage = '';
   
   loadAllProducts();
 }
@@ -154,7 +173,6 @@ function updateProduct(id) {
   
   saveProducts(products);
   alert('✓ Updated!');
-  loadAllProducts();
 }
 
 function loadAllProducts() {
@@ -168,6 +186,7 @@ function loadAllProducts() {
   
   grid.innerHTML = products.map(p => `
     <div class="product-card">
+    <img src="${p.img}" alt="${p.name}" class="product-img">
     <h3 style="color: var(--cream); margin-bottom: 10px;">${p.name}</h3>
     <p style="color: var(--muted); font-size: 12px;">${p.cat}</p>
     
