@@ -191,5 +191,20 @@ document.getElementById('add-btn').addEventListener('click', () => {
 }
 </style>
 </div>
+<script>
+  function updateCartCount() {
+    const count = getCart().length;
+    const cartCountEl = document.querySelector('.cart-count');
+    if (cartCountEl) {
+      cartCountEl.textContent = count;
+    }
+  }
+  
+  // Update on page load
+  window.addEventListener('load', updateCartCount);
+  
+  // Also update whenever localStorage changes
+  window.addEventListener('storage', updateCartCount);
+  </script>
 </body>
 </html>

@@ -32,29 +32,32 @@
 
 <section class="section" style="padding-top:60px;">
   <div class="wrap">
-    <h1 style="color: var(--cream); margin-bottom: 40px;">Votre panier</h1>
+    <div style="display: flex; gap: 10px; margin-bottom: 40px;">
+      <span class="eyebrow" style="color: var(--brass);">PANIER</span>
+      <h1 style="color: var(--cream); margin: 0; font-size: 28px;">Your Items</h1>
+    </div>
     
-    <div style="display: grid; grid-template-columns: 1fr 350px; gap: 40px;">
+    <div style="display: grid; grid-template-columns: 1fr 320px; gap: 40px;">
       <!-- Cart Items -->
       <div id="cart-items"></div>
       
       <!-- Summary -->
       <div style="background: var(--stucco-dim); padding: 24px; border-radius: 12px; border: 1px solid var(--line); height: fit-content;">
-        <h3 style="color: var(--brass); margin-bottom: 20px;">Résumé de commande</h3>
-        <div style="display: flex; justify-content: space-between; margin-bottom: 12px; color: var(--muted);">
-          <span>Sous-total</span>
-          <span id="subtotal">0,00</span>
+        <h3 style="color: var(--brass); margin-bottom: 20px; font-size: 14px; text-transform: uppercase; letter-spacing: 0.1em;">Order Summary</h3>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 13px;">
+          <span style="color: var(--muted);">Subtotal</span>
+          <span style="color: var(--cream);" id="subtotal">0.00</span>
         </div>
-        <div style="display: flex; justify-content: space-between; margin-bottom: 20px; color: var(--muted);">
-          <span>Livraison</span>
-          <span id="shipping">0,00</span>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 20px; font-size: 13px; padding-bottom: 20px; border-bottom: 1px solid var(--line);">
+          <span style="color: var(--muted);">Shipping</span>
+          <span style="color: var(--cream);" id="shipping">0.00</span>
         </div>
-        <div style="display: flex; justify-content: space-between; font-size: 18px; font-weight: 700; color: var(--brass); margin-bottom: 30px;">
+        <div style="display: flex; justify-content: space-between; font-size: 16px; font-weight: 700; color: var(--brass); margin-bottom: 30px;">
           <span>Total</span>
-          <span id="total">0,00</span>
+          <span id="total">0.00</span>
         </div>
-        <a href="checkout.html" class="btn brass" style="display: block; text-align: center; padding: 14px; border-radius: 6px; text-decoration: none; margin-bottom: 12px;">Passer la commande</a>
-        <a href="shop.html" style="display: block; text-align: center; color: var(--brass); text-decoration: none; font-size: 14px;">Continuer mes achats</a>
+        <a href="checkout.html" class="btn brass" style="display: block; text-align: center; padding: 12px; border-radius: 6px; text-decoration: none; margin-bottom: 12px; width: 100%; font-size: 13px;">Checkout</a>
+        <a href="shop.html" style="display: block; text-align: center; color: var(--brass); text-decoration: none; font-size: 13px;">Continue Shopping</a>
       </div>
     </div>
   </div>
@@ -106,10 +109,10 @@ function loadCart() {
   const itemsEl = document.getElementById('cart-items');
   
   if (cart.length === 0) {
-    itemsEl.innerHTML = '<p style="color: var(--muted); grid-column: 1 / -1;">Votre panier est vide</p>';
-    document.getElementById('subtotal').textContent = '0,00';
-    document.getElementById('shipping').textContent = '0,00';
-    document.getElementById('total').textContent = '0,00';
+    itemsEl.innerHTML = '<p style="color: var(--muted); font-size: 14px;">Your cart is empty</p>';
+    document.getElementById('subtotal').textContent = '0.00';
+    document.getElementById('shipping').textContent = '0.00';
+    document.getElementById('total').textContent = '0.00';
     return;
   }
   
@@ -118,39 +121,32 @@ function loadCart() {
     if (!product) return '';
     
     return `
-      <div style="background: var(--stucco-dim); padding: 20px; border-radius: 12px; border: 1px solid var(--line); margin-bottom: 20px; display: flex; gap: 20px;">
-        <img src="${product.img}" alt="${product.name}" style="width: 120px; height: 120px; object-fit: cover; border-radius: 8px;">
+      <div style="background: var(--stucco-dim); padding: 20px; border-radius: 8px; border: 1px solid var(--line); margin-bottom: 16px; display: flex; gap: 16px;">
+        <img src="${product.img}" alt="${product.name}" style="width: 100px; height: 100px; object-fit: cover; border-radius: 6px; flex-shrink: 0;">
         
         <div style="flex: 1;">
-          <h3 style="color: var(--cream); margin-bottom: 8px;">${product.name}</h3>
-          <p style="color: var(--muted); font-size: 13px; margin-bottom: 12px;">${product.cat}</p>
+          <h3 style="color: var(--cream); margin: 0 0 6px; font-size: 14px; font-weight: 600;">${product.name}</h3>
+          <p style="color: var(--muted); font-size: 12px; margin: 0 0 10px;">${product.cat}</p>
           
-          <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 12px;">
-            <label style="font-size: 12px; color: var(--muted);">Taille:</label>
-            <span style="color: var(--brass);">${item.size || 'M'}</span>
-          </div>
-          
-          <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 12px;">
-            <label style="font-size: 12px; color: var(--muted);">Qty:</label>
-            <input type="number" value="${item.qty}" min="1" max="10" onchange="updateQuantity(${item.id}, '${item.size}', parseInt(this.value))" style="width: 50px; padding: 6px; background: var(--stucco); border: 1px solid var(--line); border-radius: 4px; color: var(--text);">
+          <div style="display: flex; gap: 12px; font-size: 12px; margin-bottom: 12px;">
+            <span style="color: var(--muted);">Size: <span style="color: var(--brass);">${item.size || 'M'}</span></span>
+            <span style="color: var(--muted);">Qty: <input type="number" value="${item.qty}" min="1" max="10" onchange="updateQuantity(${item.id}, '${item.size}', parseInt(this.value))" style="width: 40px; padding: 4px; background: var(--stucco); border: 1px solid var(--line); border-radius: 3px; color: var(--text); font-size: 12px;"></span>
           </div>
           
           <div style="display: flex; justify-content: space-between; align-items: center;">
-            <span style="color: var(--brass); font-weight: 600;">${fmtPrice(product.price * item.qty)}</span>
-            <button onclick="removeItem(${item.id}, '${item.size}')" style="padding: 6px 12px; background: #9C3B34; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px;">Supprimer</button>
+            <span style="color: var(--brass); font-weight: 600; font-size: 13px;">${fmtPrice(product.price * item.qty)}</span>
+            <button onclick="removeItem(${item.id}, '${item.size}')" style="padding: 6px 10px; background: #9C3B34; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 11px;">Remove</button>
           </div>
         </div>
       </div>
     `;
   }).join('');
   
-  // Update totals
   document.getElementById('subtotal').textContent = fmtPrice(cartSubtotal());
   document.getElementById('shipping').textContent = fmtPrice(shippingCost());
   document.getElementById('total').textContent = fmtPrice(cartTotal());
 }
 
-// Load on page load
 window.addEventListener('load', () => {
   loadCart();
   updateCartCount();
