@@ -126,6 +126,10 @@ qtySelect.addEventListener('change', () => {
 document.getElementById('add-btn').addEventListener('click', () => {
   qty = parseInt(qtySelect.value);
   
+  // Get size from selector
+  const sizeSelect = document.querySelector('[name="size"]') || document.getElementById('size-select');
+  const size = sizeSelect ? sizeSelect.value : 'M';
+  
   // Add animation
   const btn = document.getElementById('add-btn');
   btn.style.transform = 'scale(1.05)';
@@ -136,8 +140,8 @@ document.getElementById('add-btn').addEventListener('click', () => {
     btn.style.boxShadow = 'none';
   }, 300);
   
-  // Add to cart
-  addToCart(product.id, qty);
+  // Add to cart WITH SIZE
+  addToCart(product.id, qty, size);
   
   // Show modal
   showAddedModal(product.name, qty);
@@ -199,6 +203,18 @@ document.getElementById('add-btn').addEventListener('click', () => {
       cartCountEl.textContent = count;
     }
   }
+  function handleAddToCart() {
+  const productId = parseInt(new URLSearchParams(location.search).get('id'));
+  const qtyInput = document.querySelector('[name="qty"]');
+  const sizeInput = document.querySelector('[name="size"]');
+  
+  const qty = parseInt(qtyInput?.value) || 1;
+  const size = sizeInput?.value || 'M';
+  
+  addToCart(productId, qty, size);
+  updateCartCount();
+  showAddedModal();
+}
   
   // Update on page load
   window.addEventListener('load', updateCartCount);
