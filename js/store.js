@@ -45,12 +45,26 @@ function getCart() {
 
 function addToCart(productId, qty, size) {
   const cart = getCart();
-  const existing = cart.find(item => item.id === productId && item.size === size);
-  if (existing) {
-    existing.qty += qty;
+  const sizeToUse = size || 'M';
+  const qtyToAdd = parseInt(qty) || 1;
+  
+  // Search for existing item with SAME ID AND SAME SIZE
+  const existingIndex = cart.findIndex(item => 
+    item.id === parseInt(productId) && item.size === sizeToUse
+  );
+  
+  if (existingIndex !== -1) {
+    // Item exists - increment quantity
+    cart[existingIndex].qty += qtyToAdd;
   } else {
-    cart.push({ id: productId, qty: qty, size: size || 'M' });
+    // Item doesn't exist - add new
+    cart.push({ 
+      id: parseInt(productId), 
+      qty: qtyToAdd, 
+      size: sizeToUse 
+    });
   }
+  
   localStorage.setItem(CART_KEY, JSON.stringify(cart));
 }
 

@@ -297,15 +297,15 @@ function handleSubmit(e){
       id: data.orderId,
       customer: customer,
       items: cart.map(item => {
-        const product = getProduct(item.id);
-        return {
-          id: item.id,
-          name: product.name,
-          size: item.size,
-          qty: item.qty,
-          price: product.price
-        };
-      }),
+          const p = getProduct(item.id);
+          return {
+            id: item.id,
+            name: p.name,
+            size: item.size || 'M',
+            qty: item.qty,
+            price: p.price,
+          };
+    }),
       total: total,
       paymentMethod: 'whatsapp',
       status: 'confirmed'
