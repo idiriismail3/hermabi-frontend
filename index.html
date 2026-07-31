@@ -414,12 +414,22 @@ function loadCollectionProducts() {
     </div>
   `).join('');
 }
+// Update cart count
+function updateCartCount() {
+  const count = getCart().length;
+  const cartCountEl = document.querySelector('.cart-count');
+  if (cartCountEl) {
+    cartCountEl.textContent = count;
+  }
+}
+
+window.addEventListener('load', updateCartCount);
+
+window.addEventListener('storage', updateCartCount);
 
 // Load on page load
 window.addEventListener('load', loadCollectionProducts);
 </script>
-
-
 
 <!-- Tagline -->
 <section class="tagline-section">
@@ -466,40 +476,7 @@ window.addEventListener('load', loadCollectionProducts);
   </div>
 </footer>
 <script>
-  // Maillots collection
-  const maillots = PRODUCTS.filter(p => p.cat === 'Maillots');
-  document.getElementById('maillots-grid').innerHTML = maillots.slice(0, 6).map(p => `
-    <a href="product.html?id=${p.id}" class="collection-card">
-      <div class="collection-card-img"><img src="${p.img}" alt="${p.name}"></div>
-      <div class="collection-card-info">
-        <div class="collection-card-name">${p.name}</div>
-        <div class="collection-card-price">${fmtPrice(p.price)}</div>
-      </div>
-    </a>
-  `).join('');
 
-  // Pantalons collection
-  const pantalons = PRODUCTS.filter(p => p.cat === 'Pantalons');
-  document.getElementById('pantalons-grid').innerHTML = pantalons.slice(0, 6).map(p => `
-    <a href="product.html?id=${p.id}" class="collection-card">
-      <div class="collection-card-img"><img src="${p.img}" alt="${p.name}"></div>
-      <div class="collection-card-info">
-        <div class="collection-card-name">${p.name}</div>
-        <div class="collection-card-price">${fmtPrice(p.price)}</div>
-      </div>
-    </a>
-  `).join('');
-
-  // All products
-  document.getElementById('all-grid').innerHTML = PRODUCTS.slice(0, 6).map(p => `
-    <a href="product.html?id=${p.id}" class="collection-card">
-      <div class="collection-card-img"><img src="${p.img}" alt="${p.name}"></div>
-      <div class="collection-card-info">
-        <div class="collection-card-name">${p.name}</div>
-        <div class="collection-card-price">${fmtPrice(p.price)}</div>
-      </div>
-    </a>
-  `).join('');
   let currentSlide = 0;
 const slides = document.querySelectorAll('.carousel-image');
 
