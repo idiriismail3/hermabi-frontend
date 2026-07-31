@@ -281,20 +281,41 @@ function handleSubmit(e){
   })
   .then(res => res.json())
   .then(data => {
-    if (!data.success) {
-      showToast('Erreur: ' + (data.error || 'Erreur inconnue'));
-      submitBtn.disabled = false;
-      submitBtn.textContent = originalText;
-      return;
-    }
+  if (!data.success) {
+    showToast('Erreur: ' + (data.error || 'Erreur inconnue'));
+    submitBtn.disabled = false;
+    submitBtn.textContent = originalText;
+    return;
+  }
 
-    // Create message for WhatsApp
-    const items = cart.map(item => {
-      const p = getProduct(item.id);
-      return `${p.name} x${item.qty}`;
-    }).join('\n');
-    
-    const message = `Commande #${data.orderId}\n\n${items}\n\nTotal: ${fmtPrice(total)} DHS`;
+  // Create COMPLETE message for WhatsApp
+  const items = cart.map(item => {
+    const p = getProduct(item.id);
+    return `• ${p.name} (Taille: ${item.size}) x${item.qty} = ${fmtPrice(p.price * item.qty)} DHS`;
+  }).join('\n');
+  
+  const message = `🛍️ NOUVELLE COMMANDE
+
+📋 Commande #${data.orderId}
+
+👤 CLIENT:
+Nom: ${customer.fullname}
+Email: ${customer.email}
+Téléphone: ${customer.phone}
+
+📍 ADRESSE DE LIVRAISON:
+${customer.address}
+${customer.city} ${customer.postal ? customer.postal : ''}
+
+📦 PRODUITS:
+${items}
+
+💰 RÉSUMÉ:
+Sous-total: ${fmtPrice(cartSubtotal())} DHS
+Livraison: ${fmtPrice(shippingCost())} DHS
+TOTAL: ${fmtPrice(total)} DHS
+
+✅ Confirmé par le client`;
     
     // REDIRECT TO WHATSAPP FIRST
     const whatsappUrl = `https://wa.me/212611301422?text=${encodeURIComponent(message)}`;
