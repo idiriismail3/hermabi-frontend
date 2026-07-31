@@ -599,3 +599,67 @@ a:hover {
   color: var(--cream);
   margin-bottom: 40px;
 }
+/* Mobile Optimization */
+@media (max-width: 768px) {
+  .wrap {
+    padding: 20px 16px;
+  }
+
+  .section {
+    padding: 40px 16px !important;
+  }
+
+  h1, h2 {
+    font-size: clamp(20px, 5vw, 32px) !important;
+  }
+
+  /* Cart page */
+  .cart-layout {
+    display: block !important;
+  }
+
+  .cart-summary {
+    margin-top: 30px !important;
+  }
+
+  /* Checkout form */
+  .form-group input,
+  .form-group select {
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+
+  .field-row {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Product grid */
+  .products-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)) !important;
+  }
+
+  /* Buttons */
+  .btn {
+    padding: 12px 20px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .nav-links {
+    display: none;
+  }
+
+  .nav {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .wrap {
+    padding: 16px 12px;
+  }
+
+  h1 {
+    font-size: 24px !important;
+  }
+}
+
