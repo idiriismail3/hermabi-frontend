@@ -27,6 +27,14 @@
 .success { color: #51cf66; }
 .image-preview { width: 100%; height: 150px; border: 2px solid var(--line); border-radius: 6px; margin-bottom: 15px; object-fit: cover; }
 </style>
+<!-- Add to <head> of all pages -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=GA_ID"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'GA_ID');
+  </script>
 </head>
 <body style="background: var(--stucco); color: var(--text); font-family: 'Poppins', sans-serif;">
 
