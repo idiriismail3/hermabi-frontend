@@ -248,6 +248,7 @@ function handleSubmit(e){
     phone: form.querySelector('[name="phone"]').value.trim(),
     address: form.querySelector('[name="address"]').value.trim(),
     city: form.querySelector('[name="city"]').value.trim(),
+    postal: form.querySelector('[name="postal"]')?.value.trim() || '',
   };
   
   const total = cartTotal();
@@ -269,6 +270,7 @@ function handleSubmit(e){
         return {
           id: item.id,
           name: p.name,
+          size: item.size || 'M',
           qty: item.qty,
           price: p.price,
         };
@@ -281,76 +283,89 @@ function handleSubmit(e){
   })
   .then(res => res.json())
   .then(data => {
-  if (!data.success) {
-    showToast('Erreur: ' + (data.error || 'Erreur inconnue'));
-    submitBtn.disabled = false;
-    submitBtn.textContent = originalText;
-    return;
-  }
+    if (!data.success) {
+      showToast('Erreur: ' + (data.error || 'Erreur inconnue'));
+      submitBtn.disabled = false;
+      submitBtn.textContent = originalText;
+      return;
+    }
 
-  // Create COMPLETE message for WhatsApp
-  const items = cart.map(item => {
-    const p = getProduct(item.id);
-    return `• ${p.name} (Taille: ${item.size}) x${item.qty} = ${fmtPrice(p.price * item.qty)} DHS`;
-  }).join('\n');
-  
-  const message = `🛍️ NOUVELLE COMMANDE
+    // Create COMPLETE message for WhatsApp
+    const items = cart.map(item => {
+      const p = getProduct(item.id);
+      return `• ${p.name}\n  Taille: ${item.size || 'M'}\n  Quantité: ${item.qty}\n  Prix: ${fmtPrice(p.price * item.qty)} DHS`;
+    }).join('\n\n');
+    
+    const message = `🛍️ *NOUVELLE COMMANDE HERMABI*
 
-📋 Commande #${data.orderId}
+📋 *Numéro Commande:* #${data.orderId}
 
-👤 CLIENT:
-Nom: ${customer.fullname}
-Email: ${customer.email}
-Téléphone: ${customer.phone}
+👤 *INFORMATIONS CLIENT:*
+*Nom:* ${customer.fullname}
+*Email:* ${customer.email}
+*Téléphone:* ${customer.phone}
 
-📍 ADRESSE DE LIVRAISON:
+📍 *ADRESSE DE LIVRAISON:*
 ${customer.address}
-${customer.city} ${customer.postal ? customer.postal : ''}
+${customer.city}${customer.postal ? ' ' + customer.postal : ''}
 
-📦 PRODUITS:
+📦 *PRODUITS COMMANDÉS:*
 ${items}
 
-💰 RÉSUMÉ:
+💰 *RÉSUMÉ DU PAIEMENT:*
 Sous-total: ${fmtPrice(cartSubtotal())} DHS
 Livraison: ${fmtPrice(shippingCost())} DHS
-TOTAL: ${fmtPrice(total)} DHS
+*TOTAL: ${fmtPrice(total)} DHS*
 
-✅ Confirmé par le client`;
+✅ Commande confirmée par le client`;
     
-    // REDIRECT TO WHATSAPP FIRST
+    // REDIRECT TO WHATSAPP
     const whatsappUrl = `https://wa.me/212611301422?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
     
-    // THEN clear cart and save order
+    // Clear cart
     localStorage.setItem(CART_KEY, JSON.stringify([]));
+    updateCartCount();
     
+    // Save order
     const ordersKey = 'hermabi_orders';
     const existingOrders = JSON.parse(localStorage.getItem(ordersKey) || '[]');
     const newOrder = {
       id: data.orderId,
       customer: customer,
       items: cart.map(item => {
-          const p = getProduct(item.id);
-          return {
-            id: item.id,
-            name: p.name,
-            size: item.size || 'M',
-            qty: item.qty,
-            price: p.price,
-          };
-    }),
+        const p = getProduct(item.id);
+        return {
+          id: item.id,
+          name: p.name,
+          size: item.size || 'M',
+          qty: item.qty,
+          price: p.price,
+        };
+      }),
       total: total,
       paymentMethod: 'whatsapp',
-      status: 'confirmed'
+      status: 'confirmed',
+      createdAt: new Date().toISOString()
     };
     existingOrders.push(newOrder);
     localStorage.setItem(ordersKey, JSON.stringify(existingOrders));
     
-    // Redirect to success page
+    // Success message
+    showToast('✅ Commande confirmée! Redirection vers WhatsApp...');
+    
+    // Redirect after delay
     setTimeout(() => {
       window.location.href = 'checkout.html?success=true';
-    }, 1000);
-  })}
+    }, 2000);
+  })
+  .catch(err => {
+    console.error('Checkout error:', err);
+    showToast('Erreur de connexion. Veuillez réessayer.');
+    submitBtn.disabled = false;
+    submitBtn.textContent = originalText;
+  });
+}
 
 function showCardRedirectScreen(orderRef, total){
   root.innerHTML = `
