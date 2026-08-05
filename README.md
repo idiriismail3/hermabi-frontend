@@ -1,13 +1,4 @@
-## 📋 Table of Contents
-- [Project Structure](#project-structure)
-- [Frontend Setup](#frontend-setup)
-- [Backend Setup](#backend-setup)
-- [Configuration](#configuration)
-- [Running the Application](#running-the-application)
-- [Admin Dashboard](#admin-dashboard)
-- [Deployment](#deployment)
 
----
 
 ## 🎯 Project Structure
 hermabi-site/
